@@ -1,0 +1,85 @@
+add_newline = true
+
+format = """
+[](fg:#7aa2f7)\
+$os\
+$directory\
+[](fg:#7aa2f7 bg:#1a1b26)\
+$git_branch\
+$git_status\
+[](fg:#1a1b26)\
+$fill\
+[](fg:#1a1b26)\
+$cmd_duration\
+$time\
+[](#1a1b26)\
+\n$character\
+"""
+
+[character]
+error_symbol = " [└─»](bold red)"
+success_symbol = " [└─»](bold #e0af68)"
+
+[os]
+format = "[$symbol]($style)"
+disabled = false
+style = "bg:#7aa2f7"
+[os.symbols]
+Windows = " "
+Macos = " "
+Ubuntu = "󰕈 "
+
+[directory]
+format = '[$path]($style)[$read_only]($read_only_style)'
+read_only = " "
+read_only_style = 'fg:#f7768e bg:#1a1b26'
+truncation_length = 100
+truncation_symbol = ""
+truncate_to_repo = true
+style = 'bg:#7aa2f7 fg:#73daca'
+
+[git_branch]
+format = '[$symbol$branch(:$remote_branch)]($style)'
+symbol = "   "
+truncation_symbol = ''
+style = 'fg:#7aa2f7 bg:#1a1b26'
+
+[git_status]
+conflicted = "💥"
+ahead = "🏎💨"
+behind = "😰"
+diverged = "😵"
+untracked = "🌚‍"
+stashed = "📦"
+modified = "📝"
+staged = '🔦'
+renamed = "🏷"
+deleted = "🗑"
+style = 'fg:#e0af68 bg:#1a1b26'
+up_to_date = '✓'
+format = '([\[$all_status$ahead_behind\]]($style))'
+
+[git_metrics]
+added_style = 'fg:#9ece6a bg:#1a1b26'
+deleted_style = 'fg:#9ece6a bg:#1a1b26'
+format = '[+$added/-$deleted]($deleted_style)'
+disabled = false
+
+[cmd_duration]
+disabled = false
+min_time = 1
+style = 'fg:#e0af68 bg:#1a1b26'
+format = "[ $duration]($style)"
+
+[container]
+format = '[$symbol \[$name\]]($style) '
+
+[time]
+disabled = false
+format = "[   $time ]($style)"
+time_format = '%H:%M'
+style = 'bg:#1a1b26 fg:#ffffff'
+
+[fill]
+symbol = '─'
+style = '#e0af68'
