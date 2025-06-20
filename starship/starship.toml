@@ -1,5 +1,6 @@
 add_newline = true
 
+
 format = """
 [](fg:#7aa2f7)\
 $os\
@@ -39,7 +40,7 @@ truncate_to_repo = true
 style = 'bg:#7aa2f7 fg:#73daca'
 
 [git_branch]
-format = '[$symbol$branch(:$remote_branch)]($style)'
+format = '[$symbol$branch(:$remote_branch)]($style)' # nf-pl-left_soft_divider
 symbol = "   "
 truncation_symbol = ''
 style = 'fg:#7aa2f7 bg:#1a1b26'
