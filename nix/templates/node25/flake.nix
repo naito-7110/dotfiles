@@ -5,11 +5,11 @@
 
   outputs = { self, nixpkgs }:
   let
-    system = builtins.currentSystem;
+    system = "aarch64-darwin"
     pkgs = import nixpkgs { inherit system; };
   in {
     devShells.${system}.default = pkgs.mkShell {
-      buildInputs = with pkgs; [
+      packages = with pkgs; [
         nodejs_25
       ];
 
