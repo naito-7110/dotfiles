@@ -3,11 +3,14 @@
   programs = {
     git = {
       enable = true;
-      userName = "naito-7110";
-      userEmail = "shige.7110.330@gmail.com";
-      
-      extraConfig = {
-        core = {
+     
+      settings = {
+        user = {
+          name = "naito-7110";
+          email = "shige.7110.330@gmail.com";
+        };
+
+         core = {
           editor = "nvim -f";
           autocrlf = "input";
           quotepath = false;
