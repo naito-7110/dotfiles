@@ -25,6 +25,12 @@
       };
 
       flake = {
+        templates = {
+          node25 = {
+            path = ./nix/templates/node25;
+            description = "Node 25";
+          };
+        };
         darwinConfigurations."7110" =
            nix-darwin.lib.darwinSystem {
             system = "aarch64-darwin";
@@ -44,7 +50,6 @@
               }
             ];
           };
-
       };
     };
 }
