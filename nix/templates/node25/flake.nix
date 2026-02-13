@@ -11,11 +11,9 @@
     devShells.${system}.default = pkgs.mkShell {
       packages = with pkgs; [
         nodejs_25
-        corepack
       ];
 
       shellHook = ''
-        corepack enable
         echo "Node: $(node -v)"
       '';
     };
