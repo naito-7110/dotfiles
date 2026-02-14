@@ -1,5 +1,5 @@
 
-{ pkg, ... }:
+{ ... }:
 
 {
   programs.git = {
