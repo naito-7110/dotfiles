@@ -38,6 +38,10 @@
             path = ./nix/templates/node25;
             description = "Node 25";
           };
+          rust = {
+            path = ./nix/templates/rust;
+            description = "rust";
+          };
         };
         darwinConfigurations."7110" =
            nix-darwin.lib.darwinSystem {
