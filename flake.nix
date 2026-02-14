@@ -45,7 +45,7 @@
               ./nix/modules/darwin
               home-manager.darwinModules.home-manager
               {
-		ids.gids.nixbld = 350;
+                ids.gids.nixbld = 350;
                 users.users.n7110 = {
                   home = "/Users/n7110";
                 };
