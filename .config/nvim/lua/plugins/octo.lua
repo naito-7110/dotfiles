@@ -1,7 +1,6 @@
 return {
   {
     "pwntester/octo.nvim",
-    cmd = "Octo", -- 使う時だけロード
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
