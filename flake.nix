@@ -26,6 +26,7 @@
           packages = with pkgs; [
             lua-language-server
             stylua
+            nil
           ];
         };
       };
