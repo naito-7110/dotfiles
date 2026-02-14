@@ -21,7 +21,13 @@
 
       systems = [ "aarch64-darwin" ];
 
-      perSystem = { system, ... }: {
+      perSystem = { system,  pkgs, ...}: {
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            lua-language-server
+            stylua
+          ];
+        };
       };
 
       flake = {
