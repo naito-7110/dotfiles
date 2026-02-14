@@ -32,6 +32,14 @@ vim.lsp.config("nil_ls", {
 vim.lsp.enable("nil_ls")
 
 
+vim.lsp.config("marksman", {
+  filetypes = { "markdown" },
+  cmd = { "marksman", "server"},
+})
+
+vim.lsp.enable("marksman")
+
+
 --メッセージ
 vim.diagnostic.config({
   virtual_text = false,  -- 行末にゴチャゴチャ出さない
