@@ -1,0 +1,11 @@
+{
+  "workspace": {
+    "ignoreDir": [
+      "nix",
+      ".direnv"
+    ],
+    "ignoreDir": [
+      "nix"
+    ]
+  }
+}
