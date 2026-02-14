@@ -22,4 +22,7 @@ vim.keymap.set('n', '<C-w>', ':NvimTreeToggle<CR>')                   -- エク�
 vim.keymap.set('n', '<C-s>', ':ASToggle<CR>', {})                     -- 自動保存
 vim.keymap.set('n', '<SPACE><TAB>', ':Oil<CR>', {})                     -- 自動保存
 
-
+-- lsp
+vim.keymap.set("n", "<leader>e", function()
+  vim.diagnostic.open_float(nil, { focus = false })
+end)
