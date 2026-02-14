@@ -10,6 +10,10 @@ return {
           file_ignore_patterns = {
             "%.git/",
             "node_modules/",
+            "target/",
+            "obj/",
+            "bin/",
+            "dist/",
             "%.DS_Store"
           },
         },
