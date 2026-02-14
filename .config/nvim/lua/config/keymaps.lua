@@ -20,6 +20,6 @@ vim.keymap.set({ 'n', 'v' }, '<SPACE>f', ':Telescope find_files<CR>') -- ファ�
 vim.keymap.set({ 'n', 'v' }, '<SPACE>g', ':Telescope live_grep<CR>')  -- グレップファインド
 vim.keymap.set('n', '<C-w>', ':NvimTreeToggle<CR>')                   -- エクスプローラー
 vim.keymap.set('n', '<C-s>', ':ASToggle<CR>', {})                     -- 自動保存
-vim.keymap.set('n', '<SPACE>o', ':Oil<CR>', {})                     -- 自動保存
+vim.keymap.set('n', '<SPACE><TAB>', ':Oil<CR>', {})                     -- 自動保存
 
 
