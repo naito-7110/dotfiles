@@ -11,6 +11,7 @@
       v = "nvim";
 
       c = "clear";
+      l = "ls -lah";
 
       gs = "git status";
       gl = "git log --oneline --graph --decorate --all";
