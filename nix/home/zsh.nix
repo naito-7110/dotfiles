@@ -24,7 +24,7 @@
       setopt hist_reduce_blanks
       setopt append_history
       setopt share_history
-
+      setopt inc_append_history
       HISTFILE=$HOME/.zsh_history
       HISTSIZE=10000
       SAVEHIST=10000
