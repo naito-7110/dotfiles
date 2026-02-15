@@ -4,7 +4,7 @@ local act = wezterm.action
 
 config.automatically_reload_config = true
 config.font_size = 12.0
-config.line_hight = 1.0
+config.line_height = 1.0
 config.use_ime = true
 config.window_background_opacity = 0.70
 
