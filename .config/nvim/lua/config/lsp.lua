@@ -44,6 +44,47 @@ vim.lsp.config("marksman", {
 vim.lsp.enable("marksman")
 
 
+-- TypeScript (ts_ls)
+vim.lsp.config("ts_ls", {
+  filetypes = {
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
+  },
+--  root_dir = function(bufname)
+--    local root = vim.fs.find(
+--      { "tsconfig.json", "package.json", ".git" },
+--      { upward = true, path = bufname }
+--    )[1]
+--    return root and vim.fs.dirname(root) or vim.fn.getcwd()
+--  end,
+})
+
+vim.lsp.enable("ts_ls")
+
+
+-- Vue (vue_ls / Volar 3.x)
+vim.lsp.config("vue_ls", {
+  cmd = { "vue-language-server", "--stdio" },
+  filetypes = { "vue" },
+  root_dir = function(bufname)
+    local root = vim.fs.find(
+      { "tsconfig.json", "package.json", ".git" },
+      { upward = true, path = bufname }
+    )[1]
+    return root and vim.fs.dirname(root) or vim.fn.getcwd()
+  end,
+  init_options = {
+    vue = {
+      hybridMode = false, -- Volar 3系ではfalse推奨
+    },
+  },
+})
+
+vim.lsp.enable("vue_ls")
+
+
 --メッセージ
 vim.diagnostic.config({
   virtual_text = false,  -- 行末にゴチャゴチャ出さない
