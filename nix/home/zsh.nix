@@ -28,6 +28,9 @@
       HISTFILE=$HOME/.zsh_history
       HISTSIZE=10000
       SAVEHIST=10000
+
+      # --- options
+      setopt auto_cd
     '';
   }; 
 }
