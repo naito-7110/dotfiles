@@ -80,6 +80,6 @@ vim.diagnostic.config({
   severity_sort = true,  -- 重要度順に並べる
   float = {
     border = "rounded",
-    source = "always",
+    source = 'if_many',
   },
 })
