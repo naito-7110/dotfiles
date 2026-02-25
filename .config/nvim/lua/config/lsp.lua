@@ -61,7 +61,7 @@ vim.lsp.config("ts_ls", {
     plugins = {
       {
         name = "@vue/typescript-plugin",
-        location = vim.env.HOME .. "$PWD/node_modules/@vue/typescript-plugin",
+        location = vim.fn.getcwd() .. "/node_modules/@vue/typescript-plugin",
         languages = { "vue" },
       },
     },
@@ -72,6 +72,10 @@ vim.lsp.config("ts_ls", {
 
 vim.lsp.enable("ts_ls")
 
+vim.lsp.config("vue_ls", {
+  filetypes = { "vue" },
+})
+vim.lsp.enable("vue_ls")
 --メッセージ
 vim.diagnostic.config({
   virtual_text = false,  -- 行末にゴチャゴチャ出さない
