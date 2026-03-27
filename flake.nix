@@ -50,6 +50,9 @@
               ./nix/modules/darwin
               home-manager.darwinModules.home-manager
               {
+                nixpkgs.config.allowUnfree = true;
+              }
+              {
                 ids.gids.nixbld = 350;
                 users.users.n7110 = {
                   home = "/Users/n7110";
