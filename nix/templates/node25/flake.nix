@@ -12,6 +12,7 @@
       packages = with pkgs; [
         nodejs_25
         pnpm
+        vscode-langservers-extracted
       ];
 
       shellHook = ''
