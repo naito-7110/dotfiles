@@ -87,3 +87,27 @@ vim.diagnostic.config({
     source = 'if_many',
   },
 })
+
+
+-- JSON Language Server
+vim.lsp.config("jsonls", {
+  cmd = { "vscode-json-language-server", "--stdio" },
+  filetypes = { "json", "jsonc" },
+  settings = {
+    json = {
+      schemas = require("schemastore").json.schemas(),
+      validate = { enable = true },
+    },
+  },
+})
+
+vim.lsp.enable("jsonls")
+
+
+-- Auto format on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function()
+    vim.lsp.buf.format({ timeout_ms = 1000 })
+  end,
+})

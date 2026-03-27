@@ -25,4 +25,19 @@ vim.keymap.set('n', '<SPACE><TAB>', ':Oil<CR>', {})                     -- è‡ªå‹
 -- lsp
 vim.keymap.set("n", "<leader>e", function()
   vim.diagnostic.open_float(nil, { focus = false })
-end)
+end, { desc = "Show diagnostics" })
+
+-- LSP navigation
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Show references" })
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Hover information" })
+
+-- LSP actions
+vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
+
+-- Diagnostic navigation
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
