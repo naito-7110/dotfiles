@@ -36,6 +36,9 @@
       kubectl
       gh
       git-secrets
+      
+      vscode
+      claude-code
     ];
   };
 }
