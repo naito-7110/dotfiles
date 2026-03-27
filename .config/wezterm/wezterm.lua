@@ -14,7 +14,7 @@ config.inactive_pane_hsb = {
 }
 
 -- 透過設定
-local default_opacity = 0.70
+local default_opacity = 0.65
 local min_opacity = 0.5
 local max_opacity = 1.0
 local opacity = default_opacity
