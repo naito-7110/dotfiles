@@ -16,21 +16,31 @@
     };
   };
 
-  outputs = inputs @ { self, nixpkgs, flake-parts, nix-darwin, home-manager, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      flake-parts,
+      nix-darwin,
+      home-manager,
+      ...
+    }:
     flake-parts.lib.mkFlake { inherit inputs; } {
 
       systems = [ "aarch64-darwin" ];
 
-      perSystem = { system,  pkgs, ...}: {
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            lua-language-server
-            stylua
-            nil
-            marksman
-          ];
+      perSystem =
+        { system, pkgs, ... }:
+        {
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              lua-language-server
+              stylua
+              nil
+              marksman
+            ];
+          };
         };
-      };
 
       flake = {
         templates = {
@@ -38,33 +48,35 @@
             path = ./nix/templates/node25;
             description = "Node 25";
           };
+          node24 = {
+            path = ./nix/templates/node24;
+            description = "Node 24";
+          };
           rust = {
             path = ./nix/templates/rust;
             description = "rust";
           };
         };
-        darwinConfigurations."7110" =
-           nix-darwin.lib.darwinSystem {
-            system = "aarch64-darwin";
-            modules = [
-              ./nix/modules/darwin
-              home-manager.darwinModules.home-manager
-              {
-                nixpkgs.config.allowUnfree = true;
-              }
-              {
-                ids.gids.nixbld = 350;
-                users.users.n7110 = {
-                  home = "/Users/n7110";
-                };
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
+        darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          modules = [
+            ./nix/modules/darwin
+            home-manager.darwinModules.home-manager
+            {
+              nixpkgs.config.allowUnfree = true;
+            }
+            {
+              ids.gids.nixbld = 350;
+              users.users.n7110 = {
+                home = "/Users/n7110";
+              };
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
 
-                home-manager.users.n7110 =
-                  import ./nix/home;
-              }
-            ];
-          };
+              home-manager.users.n7110 = import ./nix/home;
+            }
+          ];
+        };
       };
     };
 }
