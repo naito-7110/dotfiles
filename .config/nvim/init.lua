@@ -1,3 +1,2 @@
-require('config')
-require('commands')
-
+require("config")
+require("commands")
