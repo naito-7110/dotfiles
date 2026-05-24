@@ -1,10 +1,16 @@
 -- C#
-vim.lsp.config("csharp_ls", {
-	cmd = { "csharp-ls" },
+vim.lsp.config("roslyn_ls", {
+	cmd = {
+		"Microsoft.CodeAnalysis.LanguageServer",
+		"--logLevel=Information",
+		"--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()),
+		"--stdio",
+	},
 	filetypes = { "cs" },
+	root_markers = { "*.sln", "*.slnx", "*.csproj", "omnisharp.json", "function.json" },
 })
 
-vim.lsp.enable("csharp_ls")
+vim.lsp.enable("roslyn_ls")
 
 -- Rust
 vim.lsp.config("rust_analyzer", {
