@@ -45,13 +45,9 @@
 
       flake = {
         templates = {
-          node25 = {
-            path = ./nix/templates/node25;
-            description = "Node 25";
-          };
-          node24 = {
-            path = ./nix/templates/node24;
-            description = "Node 24";
+          node = {
+            path = ./nix/templates/node;
+            description = "Node LTS";
           };
           rust = {
             path = ./nix/templates/rust;
