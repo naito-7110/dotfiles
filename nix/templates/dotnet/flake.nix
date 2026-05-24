@@ -11,7 +11,7 @@
     devShells.${system}.default = pkgs.mkShell {
       packages = with pkgs; [
         dotnetCorePackages.sdk_9_0
-        csharp-ls
+        roslyn-ls
       ];
     };
   };
