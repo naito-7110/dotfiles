@@ -57,6 +57,10 @@
             path = ./nix/templates/rust;
             description = "rust";
           };
+          dotnet = {
+            path = ./nix/templates/dotnet;
+            description = "dotnet";
+          };
         };
         darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
