@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-master, ... }:
 {
   imports = [
     ./git.nix
@@ -38,7 +38,7 @@
       git-secrets
 
       vscode
-      claude-code
+      pkgs-master.claude-code
 
       ffmpeg
       texliveFull
