@@ -1,3 +1,11 @@
+-- C#
+vim.lsp.config("csharp_ls", {
+	cmd = { "csharp-ls" },
+	filetypes = { "cs" },
+})
+
+vim.lsp.enable("csharp_ls")
+
 -- Rust
 vim.lsp.config("rust_analyzer", {
 	cmd = { "rust-analyzer" },
