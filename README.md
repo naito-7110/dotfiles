@@ -12,7 +12,7 @@ sudo darwin-rebuild switch --flake .#7110
 ```
 
 ### devShells
-- node@v25
+- node (LTS)
 ```sh
-nix flake init -t github:naito-7110/dotfiles#node25
+nix flake init -t github:naito-7110/dotfiles#node
 ```

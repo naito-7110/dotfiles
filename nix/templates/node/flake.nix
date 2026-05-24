@@ -1,5 +1,5 @@
 {
-  description = "Node 25 devShell";
+  description = "Node LTS devShell";
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
@@ -12,7 +12,7 @@
     {
       devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
-          nodejs_25
+          nodejs_24
           pnpm
           vscode-langservers-extracted
           typescript-language-server
