@@ -13,6 +13,7 @@
         rustc
         cargo
         rust-analyzer
+        lldb
       ];
     };
   };
