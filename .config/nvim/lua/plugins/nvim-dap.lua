@@ -48,24 +48,6 @@ return {
 					args = {},
 				},
 			}
-
-			-- C# (netcoredbg)
-			dap.adapters.coreclr = {
-				type = "executable",
-				command = "netcoredbg",
-				args = { "--interpreter=vscode" },
-			}
-
-			dap.configurations.cs = {
-				{
-					name = "Launch",
-					type = "coreclr",
-					request = "launch",
-					program = function()
-						return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/bin/Debug/", "file")
-					end,
-				},
-			}
 		end,
 	},
 }
