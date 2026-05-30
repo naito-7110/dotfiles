@@ -29,19 +29,18 @@
 | `[d` / `]d` | prev / next diagnostic |
 
 ## DAP (Debugger)
-Rust / C# のデバッガが devShell に同梱されている。
+Rust 用デバッガが devShell に同梱されている。C# (netcoredbg) は macOS arm64
+で署名・entitlement の制約により nvim-dap から動作させるのが困難なため
+非対応 (LSP のみ)。ブレークポイントが要る場合は VSCode を使う。
 
 | Lang | Adapter | nixpkgs |
 |------|---------|---------|
 | Rust | lldb-dap | `lldb` |
-| C# | netcoredbg | `netcoredbg` |
 
 ### 使い方
 1. 該当言語の devShell で `direnv allow` または `nix develop`
 2. Neovim 起動 → lazy.nvim が `nvim-dap` / `dap-ui` / `dap-virtual-text` を自動インストール
-3. ビルド (`cargo build` / `dotnet build`) 後、`<leader>dc` で起動。実行ファイルパスを聞かれる
-   - Rust: `target/debug/<bin>`
-   - C#: `bin/Debug/<tfm>/<app>.dll`
+3. `cargo build` 後、`<leader>dc` で起動。実行ファイルパス (`target/debug/<bin>`) を聞かれる
 
 ### Keymaps
 | Key | Action |
@@ -53,5 +52,5 @@ Rust / C# のデバッガが devShell に同梱されている。
 | `<leader>dr` | REPL toggle |
 
 ### トラブルシュート
-- アダプタが見つからない → `which lldb-dap` / `which netcoredbg` で PATH 確認、devShell に入り直す
+- アダプタが見つからない → `which lldb-dap` で PATH 確認、devShell に入り直す
 - ログ確認 → Neovim 内で `:DapShowLog`
