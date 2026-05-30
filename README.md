@@ -16,3 +16,6 @@ sudo darwin-rebuild switch --flake .#7110
 ```sh
 nix flake init -t github:naito-7110/dotfiles#node
 ```
+
+## Docs
+- [Neovim](./docs/neovim.md)
