@@ -27,6 +27,7 @@ return {
 			lua = { "stylua" },
 			rust = { "rustfmt" },
 			nix = { "nixfmt" },
+			typst = { "typstyle" },
 		},
 		format_on_save = {
 			timeout_ms = 1000,

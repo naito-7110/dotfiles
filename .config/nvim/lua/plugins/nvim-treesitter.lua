@@ -15,6 +15,7 @@ return {
 				"rust",
 				"markdown",
 				"json",
+				"typst",
 			},
 			highlight = { enable = true },
 			indent = { enable = true },
