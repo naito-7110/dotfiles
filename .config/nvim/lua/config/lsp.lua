@@ -54,6 +54,18 @@ vim.lsp.config("marksman", {
 
 vim.lsp.enable("marksman")
 
+-- Typst
+vim.lsp.config("tinymist", {
+	cmd = { "tinymist" },
+	filetypes = { "typst" },
+	settings = {
+		formatterMode = "typstyle",
+		exportPdf = "onSave",
+	},
+})
+
+vim.lsp.enable("tinymist")
+
 -- In my lsp config file:
 
 -- TypeScript Server with Vue Plugin
