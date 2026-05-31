@@ -57,6 +57,10 @@
             path = ./nix/templates/dotnet;
             description = "dotnet";
           };
+          typst = {
+            path = ./nix/templates/typst;
+            description = "typst";
+          };
         };
         darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
