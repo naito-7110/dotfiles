@@ -33,6 +33,7 @@
       lazygit
       fzf
       ripgrep
+      fd
       mise
       docker
       kubectl
