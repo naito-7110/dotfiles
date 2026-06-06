@@ -34,6 +34,7 @@
       fzf
       ripgrep
       fd
+      bat
       mise
       docker
       kubectl
