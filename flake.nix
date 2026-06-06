@@ -38,9 +38,11 @@
               lua-language-server
               stylua
               nil
+              nixfmt-rfc-style
               marksman
             ];
           };
+          formatter = pkgs.nixfmt-rfc-style;
         };
 
       flake = {
