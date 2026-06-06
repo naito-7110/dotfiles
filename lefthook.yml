@@ -1,0 +1,11 @@
+pre-commit:
+  parallel: true
+  commands:
+    stylua:
+      glob: "*.lua"
+      run: stylua {staged_files}
+      stage_fixed: true
+    nixfmt:
+      glob: "*.nix"
+      run: nixfmt {staged_files}
+      stage_fixed: true
