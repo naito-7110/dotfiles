@@ -38,7 +38,7 @@
               lua-language-server
               stylua
               nil
-              nixfmt-rfc-style
+              nixfmt
               marksman
               lefthook
             ];
@@ -46,7 +46,7 @@
               lefthook install --force >/dev/null
             '';
           };
-          formatter = pkgs.nixfmt-rfc-style;
+          formatter = pkgs.nixfmt;
         };
 
       flake = {
