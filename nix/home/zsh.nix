@@ -32,5 +32,5 @@
       # --- options
       setopt auto_cd
     '';
-  }; 
+  };
 }

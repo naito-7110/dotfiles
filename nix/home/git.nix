@@ -1,4 +1,3 @@
-
 { ... }:
 
 {
@@ -20,7 +19,7 @@
         email = "shige.7110.330@gmail.com";
       };
 
-        core = {
+      core = {
         editor = "nvim -f";
         autocrlf = "input";
         quotepath = false;
