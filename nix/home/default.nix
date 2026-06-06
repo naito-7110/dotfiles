@@ -4,6 +4,7 @@
     ./git.nix
     ./zsh.nix
     ./zoxide.nix
+    ./lazygit.nix
   ];
 
   programs = {
@@ -30,7 +31,6 @@
     packages = with pkgs; [
       direnv
       nix-direnv
-      lazygit
       fzf
       ripgrep
       fd
