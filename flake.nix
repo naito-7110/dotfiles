@@ -40,7 +40,11 @@
               nil
               nixfmt-rfc-style
               marksman
+              lefthook
             ];
+            shellHook = ''
+              lefthook install --force >/dev/null
+            '';
           };
           formatter = pkgs.nixfmt-rfc-style;
         };
