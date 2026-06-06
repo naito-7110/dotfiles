@@ -19,3 +19,4 @@ nix flake init -t github:naito-7110/dotfiles#node
 
 ## Docs
 - [Neovim](./docs/neovim.md)
+- [AeroSpace](./docs/aerospace.md)
