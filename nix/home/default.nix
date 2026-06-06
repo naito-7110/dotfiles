@@ -32,6 +32,7 @@
       nix-direnv
       lazygit
       fzf
+      ripgrep
       mise
       docker
       kubectl
