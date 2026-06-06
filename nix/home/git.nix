@@ -4,7 +4,15 @@
 {
   programs.git = {
     enable = true;
-     
+
+    delta = {
+      enable = true;
+      options = {
+        navigate = true;
+        line-numbers = true;
+      };
+    };
+
     settings = {
       user = {
         name = "naito-7110";
