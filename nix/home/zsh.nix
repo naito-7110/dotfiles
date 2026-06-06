@@ -17,7 +17,7 @@
       gl = "git log --oneline --graph --decorate --all";
     };
 
-    initExtra = ''
+    initContent = ''
       # ---- history ----
       setopt hist_ignore_all_dups
       setopt hist_ignore_dups
