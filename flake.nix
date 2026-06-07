@@ -67,6 +67,10 @@
             path = ./nix/templates/typst;
             description = "typst";
           };
+          go = {
+            path = ./nix/templates/go;
+            description = "go";
+          };
         };
         darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
