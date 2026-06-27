@@ -58,7 +58,7 @@ vim.lsp.config("clangd", {
 		"--clang-tidy",
 		"--header-insertion=iwyu",
 		"--completion-style=detailed",
-		"--function-arg-placeholders",
+		"--function-arg-placeholders=true",
 	},
 	filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
 	root_markers = {
