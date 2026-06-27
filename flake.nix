@@ -71,6 +71,10 @@
             path = ./nix/templates/go;
             description = "go";
           };
+          c = {
+            path = ./nix/templates/c;
+            description = "c";
+          };
         };
         darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
