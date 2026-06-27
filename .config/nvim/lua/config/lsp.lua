@@ -1,3 +1,6 @@
+-- LSP のログは既定で OFF。デバッグ時は <leader>ll で DEBUG に切替する。
+vim.lsp.set_log_level("OFF")
+
 -- C#
 vim.lsp.config("roslyn_ls", {
 	cmd = {
