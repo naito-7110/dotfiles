@@ -75,6 +75,10 @@
             path = ./nix/templates/c;
             description = "c";
           };
+          cpp = {
+            path = ./nix/templates/cpp;
+            description = "c++";
+          };
         };
         darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
