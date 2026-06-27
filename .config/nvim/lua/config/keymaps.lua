@@ -41,6 +41,22 @@ vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 
+-- LSP log level toggle (OFF <-> DEBUG) and viewer
+vim.keymap.set("n", "<leader>ll", function()
+	local current = vim.lsp.log.get_level()
+	if current == vim.log.levels.OFF then
+		vim.lsp.set_log_level("DEBUG")
+		vim.notify("LSP log level: DEBUG", vim.log.levels.INFO)
+	else
+		vim.lsp.set_log_level("OFF")
+		vim.notify("LSP log level: OFF", vim.log.levels.INFO)
+	end
+end, { desc = "Toggle LSP log level (OFF/DEBUG)" })
+
+vim.keymap.set("n", "<leader>lL", function()
+	vim.cmd("edit " .. vim.lsp.get_log_path())
+end, { desc = "Open LSP log file" })
+
 -- DAP (debugger)
 vim.keymap.set("n", "<leader>du", function()
 	require("dapui").toggle()
