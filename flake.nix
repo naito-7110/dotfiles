@@ -79,6 +79,10 @@
             path = ./nix/templates/cpp;
             description = "c++";
           };
+          bun = {
+            path = ./nix/templates/bun;
+            description = "Bun";
+          };
         };
         darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
