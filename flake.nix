@@ -50,40 +50,7 @@
         };
 
       flake = {
-        templates = {
-          node = {
-            path = ./nix/templates/node;
-            description = "Node LTS";
-          };
-          rust = {
-            path = ./nix/templates/rust;
-            description = "rust";
-          };
-          dotnet = {
-            path = ./nix/templates/dotnet;
-            description = "dotnet";
-          };
-          typst = {
-            path = ./nix/templates/typst;
-            description = "typst";
-          };
-          go = {
-            path = ./nix/templates/go;
-            description = "go";
-          };
-          c = {
-            path = ./nix/templates/c;
-            description = "c";
-          };
-          cpp = {
-            path = ./nix/templates/cpp;
-            description = "c++";
-          };
-          bun = {
-            path = ./nix/templates/bun;
-            description = "Bun";
-          };
-        };
+        templates = import ./nix/templates;
         darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
