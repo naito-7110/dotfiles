@@ -81,6 +81,8 @@
                   inherit pkgs-master;
                   username = "n7110";
                   homeDirectory = "/Users/n7110";
+                  gitUserName = "naito-7110";
+                  gitUserEmail = "shige.7110.330@gmail.com";
                 };
                 home-manager.users.n7110 = import ./nix/home;
               }
@@ -102,6 +104,8 @@
             };
             username = "naito-7110";
             homeDirectory = "/home/naito-7110";
+            gitUserName = "rsi-7110";
+            gitUserEmail = "naito@realsoft.co.jp";
           };
           modules = [ ./nix/home/linux.nix ];
         };

@@ -1,4 +1,4 @@
-{ ... }:
+{ gitUserName, gitUserEmail, ... }:
 
 {
   programs.delta = {
@@ -15,8 +15,8 @@
 
     settings = {
       user = {
-        name = "naito-7110";
-        email = "shige.7110.330@gmail.com";
+        name = gitUserName;
+        email = gitUserEmail;
       };
 
       core = {
