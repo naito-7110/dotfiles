@@ -28,7 +28,10 @@
     }:
     flake-parts.lib.mkFlake { inherit inputs; } {
 
-      systems = [ "aarch64-darwin" ];
+      systems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
 
       perSystem =
         { system, pkgs, ... }:
@@ -83,6 +86,24 @@
               }
             )
           ];
+        };
+
+        # WSL (Ubuntu) 用の standalone home-manager 構成。
+        # 適用: home-manager switch --flake .#naito-7110@wsl
+        homeConfigurations."naito-7110@wsl" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+          extraSpecialArgs = {
+            pkgs-master = import inputs.nixpkgs-master {
+              system = "x86_64-linux";
+              config.allowUnfree = true;
+            };
+            username = "naito-7110";
+            homeDirectory = "/home/naito-7110";
+          };
+          modules = [ ./nix/home/linux.nix ];
         };
       };
     };
