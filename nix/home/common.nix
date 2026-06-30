@@ -11,6 +11,7 @@
     ./zsh.nix
     ./zoxide.nix
     ./lazygit.nix
+    ./tmux.nix
   ];
 
   programs = {
