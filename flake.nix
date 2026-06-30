@@ -74,7 +74,11 @@
                 };
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.extraSpecialArgs = { inherit pkgs-master; };
+                home-manager.extraSpecialArgs = {
+                  inherit pkgs-master;
+                  username = "n7110";
+                  homeDirectory = "/Users/n7110";
+                };
                 home-manager.users.n7110 = import ./nix/home;
               }
             )
