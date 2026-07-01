@@ -14,8 +14,11 @@
   # （nvim-treesitter のパーサーコンパイルに必要）。
   # wl-clipboard は WSLg 経由で Windows clipboard と連携するため
   # （nvim の `+`/`*` レジスタと CLI の wl-copy/wl-paste 両方で使う）。
+  # wslu は wslview を提供し、xdg-open / gh などの browser opener 経由で
+  # Windows 側の既定ブラウザを開けるようにする。
   home.packages = with pkgs; [
     gcc
     wl-clipboard
+    wslu
   ];
 }
