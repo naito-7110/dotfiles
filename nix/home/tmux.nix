@@ -6,20 +6,41 @@
     escapeTime = 0;
     baseIndex = 1;
     terminal = "tmux-256color";
+    historyLimit = 10000;
+    mouse = true;
 
     extraConfig = ''
       # nvim 等のフルカラー対応
       set -ag terminal-overrides ",xterm-256color:RGB"
 
+      # ステータスバー
+      set-option -g status-position top
+      set-option -g status-justify centre
+      set-option -g status-left-length 90
+      set-option -g status-right-length 90
+      set-option -g status-right ""
+      set-option -g status-bg "colour233"
+      set-option -g status-fg "colour255"
+
+      # ペイン境界線 (アクティブを見分けやすく)
+      set-option -g pane-border-style "fg=colour238"
+      set-option -g pane-active-border-style "fg=colour51"
+
       # ペイン分割（カレントディレクトリを引き継ぐ）
       bind '\' split-window -h -c "#{pane_current_path}"
       bind - split-window -v -c "#{pane_current_path}"
+
+      # 新規ウィンドウ (カレントディレクトリを引き継ぐ)
+      bind c new-window -c "#{pane_current_path}"
 
       # ペイン移動 (vim 風 hjkl)
       bind h select-pane -L
       bind j select-pane -D
       bind k select-pane -U
       bind l select-pane -R
+
+      # ネストした tmux に prefix を送る
+      bind C-q send-prefix
     '';
   };
 }
