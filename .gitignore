@@ -1,1 +1,4 @@
 .direnv
+
+# Windows filesystem metadata (WSL)
+*Zone.Identifier
