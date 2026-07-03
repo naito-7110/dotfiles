@@ -41,7 +41,8 @@
 ### Keymaps
 | Key | Action |
 |-----|--------|
-| `<leader>mi` | クリップボードの画像を貼り付け |
+| `p` | (markdown内) クリップボードが画像なら画像貼り付け、それ以外は通常ペースト |
+| `<leader>mi` | クリップボードの画像を貼り付け (明示) |
 | `<leader>mp` | ブラウザプレビュー toggle |
 | `<leader>mr` | エディタ内レンダリング toggle |
 
