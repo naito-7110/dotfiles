@@ -19,5 +19,6 @@ cmp.setup({
 
 	sources = {
 		{ name = "nvim_lsp" },
+		{ name = "path" }, -- markdownリンク等のファイルパス補完
 	},
 })

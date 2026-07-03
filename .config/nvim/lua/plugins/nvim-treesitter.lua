@@ -14,6 +14,7 @@ return {
 				"lua",
 				"rust",
 				"markdown",
+				"markdown_inline",
 				"json",
 				"typst",
 			},
