@@ -1,0 +1,37 @@
+{
+  "function": {
+    "prefix": "fn",
+    "body": ["func ${1:name}(${2}) ${3} {", "\t$0", "}"],
+    "description": "function (cursor lands on the name)"
+  },
+  "method": {
+    "prefix": "meth",
+    "body": ["func (${1:r} ${2:Type}) ${3:Name}(${4}) ${5} {", "\t$0", "}"],
+    "description": "method with receiver"
+  },
+  "main": {
+    "prefix": "main",
+    "body": ["func main() {", "\t$0", "}"],
+    "description": "func main"
+  },
+  "Println": {
+    "prefix": "pln",
+    "body": ["fmt.Println($1)"],
+    "description": "fmt.Println"
+  },
+  "if err != nil": {
+    "prefix": "iferr",
+    "body": ["if err != nil {", "\treturn ${1:err}", "}"],
+    "description": "if err != nil"
+  },
+  "struct": {
+    "prefix": "st",
+    "body": ["type ${1:Name} struct {", "\t$0", "}"],
+    "description": "struct type"
+  },
+  "for range": {
+    "prefix": "forr",
+    "body": ["for ${1:i}, ${2:v} := range ${3:coll} {", "\t$0", "}"],
+    "description": "for range loop"
+  }
+}

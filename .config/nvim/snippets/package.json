@@ -6,7 +6,9 @@
       { "language": "typescript", "path": "./typescript.json" },
       { "language": "vue", "path": "./vue.json" },
       { "language": "cs", "path": "./cs.json" },
-      { "language": "markdown", "path": "./markdown.json" }
+      { "language": "markdown", "path": "./markdown.json" },
+      { "language": "rust", "path": "./rust.json" },
+      { "language": "go", "path": "./go.json" }
     ]
   }
 }

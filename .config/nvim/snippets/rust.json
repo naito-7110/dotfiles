@@ -1,0 +1,37 @@
+{
+  "function": {
+    "prefix": "fn",
+    "body": ["fn ${1:name}(${2}) {", "\t$0", "}"],
+    "description": "function (cursor lands on the name)"
+  },
+  "function with return": {
+    "prefix": "fnr",
+    "body": ["fn ${1:name}(${2}) -> ${3:()} {", "\t$0", "}"],
+    "description": "function with return type"
+  },
+  "main": {
+    "prefix": "main",
+    "body": ["fn main() {", "\t$0", "}"],
+    "description": "fn main"
+  },
+  "println": {
+    "prefix": "pln",
+    "body": ["println!(\"$1\"${2});"],
+    "description": "println!"
+  },
+  "struct": {
+    "prefix": "st",
+    "body": ["struct ${1:Name} {", "\t$0", "}"],
+    "description": "struct"
+  },
+  "impl": {
+    "prefix": "impl",
+    "body": ["impl ${1:Type} {", "\t$0", "}"],
+    "description": "impl block"
+  },
+  "test": {
+    "prefix": "test",
+    "body": ["#[test]", "fn ${1:name}() {", "\t$0", "}"],
+    "description": "test function"
+  }
+}
