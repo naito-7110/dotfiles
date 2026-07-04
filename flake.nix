@@ -62,6 +62,23 @@
               inherit system;
               config.allowUnfree = true;
             };
+
+          # ホストごとに異なるアイデンティティはここに集約する。
+          # extraSpecialArgs にそのまま展開され、common.nix / git.nix が受け取る。
+          hosts = {
+            darwin = {
+              username = "n7110";
+              homeDirectory = "/Users/n7110";
+              gitUserName = "naito-7110";
+              gitUserEmail = "shige.7110.330@gmail.com";
+            };
+            wsl = {
+              username = "naito-7110";
+              homeDirectory = "/home/naito-7110";
+              gitUserName = "rsi-7110";
+              gitUserEmail = "naito@realsoft.co.jp";
+            };
+          };
         in
         {
           templates = import ./nix/templates;
@@ -77,22 +94,20 @@
                 { pkgs, ... }:
                 let
                   pkgs-master = mkMaster "aarch64-darwin";
+                  host = hosts.darwin;
                 in
                 {
                   ids.gids.nixbld = 350;
-                  users.users.n7110 = {
-                    home = "/Users/n7110";
+                  users.users.${host.username} = {
+                    home = host.homeDirectory;
                   };
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
                   home-manager.extraSpecialArgs = {
                     inherit pkgs-master;
-                    username = "n7110";
-                    homeDirectory = "/Users/n7110";
-                    gitUserName = "naito-7110";
-                    gitUserEmail = "shige.7110.330@gmail.com";
-                  };
-                  home-manager.users.n7110 = import ./nix/home;
+                  }
+                  // host;
+                  home-manager.users.${host.username} = import ./nix/home;
                 }
               )
             ];
@@ -107,11 +122,8 @@
             };
             extraSpecialArgs = {
               pkgs-master = mkMaster "x86_64-linux";
-              username = "naito-7110";
-              homeDirectory = "/home/naito-7110";
-              gitUserName = "rsi-7110";
-              gitUserEmail = "naito@realsoft.co.jp";
-            };
+            }
+            // hosts.wsl;
             modules = [ ./nix/home/linux.nix ];
           };
         };
