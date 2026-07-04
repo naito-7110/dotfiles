@@ -25,7 +25,7 @@ in
   home.sessionVariables.BROWSER = "wslview";
 
   # WSL 固有の追加パッケージ。
-  # （wezterm / aerospace / vscode / docker は Windows 側で扱うため除外）
+  # （wezterm / vscode / docker は Windows 側で扱うため除外）
   # macOS は Xcode CLT が cc を提供するが、WSL には無いので gcc を入れる
   # （nvim-treesitter のパーサーコンパイルに必要）。
   # wl-clipboard は WSLg 経由で Windows clipboard と連携するため
