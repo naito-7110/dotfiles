@@ -7,13 +7,15 @@
       "</script>",
       "",
       "<template>",
-      "\t<div>$0</div>",
+      "\t<div :class=\"$style.${2:root}\">$0</div>",
       "</template>",
       "",
-      "<style scoped>",
+      "<style module>",
+      ".${2:root} {",
+      "}",
       "</style>"
     ],
-    "description": "Vue SFC (<script setup lang=ts>)"
+    "description": "Vue SFC (<script setup lang=ts>, CSS Modules)"
   },
   "ref": {
     "prefix": "ref",
