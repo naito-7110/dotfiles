@@ -123,9 +123,7 @@ vim.lsp.config("tinymist", {
 
 vim.lsp.enable("tinymist")
 
--- In my lsp config file:
-
--- TypeScript Server with Vue Plugin
+-- TypeScript (Vue plugin 同梱)
 vim.lsp.config("ts_ls", {
 	filetypes = {
 		"javascript",
@@ -146,7 +144,6 @@ vim.lsp.config("ts_ls", {
 		},
 	},
 	cmd = { "typescript-language-server", "--stdio" },
-	--capabilities = capabilities,
 })
 
 vim.lsp.enable("ts_ls")
