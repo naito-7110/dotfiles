@@ -26,6 +26,16 @@
       set-option -g pane-border-style "fg=colour238"
       set-option -g pane-active-border-style "fg=colour51"
 
+      # 各ペイン上部にカレントパスを表示
+      # home 配下は ~ に短縮 (/home/<user> と /Users/<user> の両方に対応)
+      # claude が動いているペインは、端末タイトル (=タスク要約) を末尾に付けて識別しやすくする
+      set-option -g pane-border-status top
+      set-option -g pane-border-format " #[bold]#{pane_index}#[nobold] #{s,^/(home|Users)/[^/]+,~,:pane_current_path}#{?#{==:#{pane_current_command},claude},  #[fg=colour51]#{pane_title}#[default],} "
+
+      # ウィンドウ名: claude のときは端末タイトル (タスク要約) を使う
+      # → 複数の claude を開いてもステータスバーの一覧で区別できる (既定は pane_current_command で全部 "claude" になる)
+      set-option -g automatic-rename-format "#{?#{==:#{pane_current_command},claude},#{pane_title},#{pane_current_command}}"
+
       # ペイン分割（カレントディレクトリを引き継ぐ）
       bind '\' split-window -h -c "#{pane_current_path}"
       bind - split-window -v -c "#{pane_current_path}"
