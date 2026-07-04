@@ -13,6 +13,7 @@
     ./zoxide.nix
     ./lazygit.nix
     ./tmux.nix
+    ./lsp.nix
   ];
 
   programs = {
