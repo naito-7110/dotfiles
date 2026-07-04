@@ -45,6 +45,10 @@ config.keys = {
 	-- 全画面（prefix なし、ウィンドウ単位）
 	{ key = "f", mods = "CTRL|CMD", action = act.ToggleFullScreen },
 
+	-- Ctrl+Enter はデフォルトで CR (Enter と同じ) になるため、
+	-- LF (= Ctrl+J) を送って Claude Code などで改行として扱えるようにする
+	{ key = "Enter", mods = "CTRL", action = act.SendString("\n") },
+
 	-- ペイン分割
 	{ key = "\\", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	{ key = "-", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
