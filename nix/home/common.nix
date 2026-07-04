@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   pkgs-master,
   username,
@@ -30,7 +31,12 @@
 
     file = {
       ".config/starship.toml".source = ../../.config/starship/starship.toml;
-      ".config/nvim".source = ../../.config/nvim;
+
+      # nvim は頻繁に触るので store への read-only コピーではなく、リポジトリ実体への
+      # out-of-store symlink にする。これで switch なしに編集が即反映される。
+      # リポジトリは README のとおり ~/works/dotfiles に clone している前提。
+      ".config/nvim".source =
+        config.lib.file.mkOutOfStoreSymlink "${homeDirectory}/works/dotfiles/.config/nvim";
     };
 
     # OS非依存の共通パッケージ。OS固有は darwin.nix / linux.nix で追加する。
