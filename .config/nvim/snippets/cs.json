@@ -23,5 +23,10 @@
     "prefix": "pma",
     "body": ["public async Task ${1:Method}(${2})", "{", "\t$0", "}"],
     "description": "public async Task method"
+  },
+  "function (method)": {
+    "prefix": "fn",
+    "body": ["public ${2:void} ${1:Name}(${3})", "{", "\t$0", "}"],
+    "description": "method (cursor lands on the name)"
   }
 }

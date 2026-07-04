@@ -23,5 +23,10 @@
     "prefix": "iface",
     "body": ["interface ${1:Name} {", "\t$0", "}"],
     "description": "interface"
+  },
+  "function": {
+    "prefix": "fn",
+    "body": ["function ${1:name}(${2}) {", "\t$0", "}"],
+    "description": "named function (cursor lands on the name)"
   }
 }

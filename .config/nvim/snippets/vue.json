@@ -31,5 +31,10 @@
     "prefix": "onmounted",
     "body": ["onMounted(() => {", "\t$0", "});"],
     "description": "onMounted()"
+  },
+  "function": {
+    "prefix": "fn",
+    "body": ["function ${1:name}(${2}) {", "\t$0", "}"],
+    "description": "named function (cursor lands on the name)"
   }
 }
