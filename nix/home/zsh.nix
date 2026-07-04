@@ -31,6 +31,11 @@
 
       # --- options
       setopt auto_cd
+
+      # zoxide の doctor は「自分の init が zshrc の最後じゃない」と警告するが、
+      # home-manager は starship 等の integration を宣言的に後段へ並べるため
+      # 順序が前後するだけで実害はない。宣言構成では誤検知なので無効化する。
+      export _ZO_DOCTOR=0
     '';
   };
 }
