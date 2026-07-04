@@ -7,6 +7,7 @@
 
   environment.systemPackages = with pkgs; [
     wezterm
+    raycast
   ];
 
   programs.zsh.enable = true;
