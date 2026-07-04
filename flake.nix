@@ -52,63 +52,68 @@
           formatter = pkgs.nixfmt;
         };
 
-      flake = {
-        templates = import ./nix/templates;
-        darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          modules = [
-            ./nix/modules/darwin
-            home-manager.darwinModules.home-manager
-            {
-              nixpkgs.config.allowUnfree = true;
-            }
-            (
-              { pkgs, ... }:
-              let
-                pkgs-master = import inputs.nixpkgs-master {
-                  system = "aarch64-darwin";
-                  config.allowUnfree = true;
-                };
-              in
+      flake =
+        let
+          # nixpkgs-master（bleeding edge）を任意 system 向けに import するヘルパー。
+          # claude-code など master 追従したいパッケージ用。darwin / WSL で共用する。
+          mkMaster =
+            system:
+            import inputs.nixpkgs-master {
+              inherit system;
+              config.allowUnfree = true;
+            };
+        in
+        {
+          templates = import ./nix/templates;
+          darwinConfigurations."7110" = nix-darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            modules = [
+              ./nix/modules/darwin
+              home-manager.darwinModules.home-manager
               {
-                ids.gids.nixbld = 350;
-                users.users.n7110 = {
-                  home = "/Users/n7110";
-                };
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-                home-manager.extraSpecialArgs = {
-                  inherit pkgs-master;
-                  username = "n7110";
-                  homeDirectory = "/Users/n7110";
-                  gitUserName = "naito-7110";
-                  gitUserEmail = "shige.7110.330@gmail.com";
-                };
-                home-manager.users.n7110 = import ./nix/home;
+                nixpkgs.config.allowUnfree = true;
               }
-            )
-          ];
-        };
-
-        # WSL (Ubuntu) 用の standalone home-manager 構成。
-        # 適用: home-manager switch --flake .#naito-7110@wsl
-        homeConfigurations."naito-7110@wsl" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
+              (
+                { pkgs, ... }:
+                let
+                  pkgs-master = mkMaster "aarch64-darwin";
+                in
+                {
+                  ids.gids.nixbld = 350;
+                  users.users.n7110 = {
+                    home = "/Users/n7110";
+                  };
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.extraSpecialArgs = {
+                    inherit pkgs-master;
+                    username = "n7110";
+                    homeDirectory = "/Users/n7110";
+                    gitUserName = "naito-7110";
+                    gitUserEmail = "shige.7110.330@gmail.com";
+                  };
+                  home-manager.users.n7110 = import ./nix/home;
+                }
+              )
+            ];
           };
-          extraSpecialArgs = {
-            pkgs-master = import inputs.nixpkgs-master {
+
+          # WSL (Ubuntu) 用の standalone home-manager 構成。
+          # 適用: home-manager switch --flake .#naito-7110@wsl
+          homeConfigurations."naito-7110@wsl" = home-manager.lib.homeManagerConfiguration {
+            pkgs = import nixpkgs {
               system = "x86_64-linux";
               config.allowUnfree = true;
             };
-            username = "naito-7110";
-            homeDirectory = "/home/naito-7110";
-            gitUserName = "rsi-7110";
-            gitUserEmail = "naito@realsoft.co.jp";
+            extraSpecialArgs = {
+              pkgs-master = mkMaster "x86_64-linux";
+              username = "naito-7110";
+              homeDirectory = "/home/naito-7110";
+              gitUserName = "rsi-7110";
+              gitUserEmail = "naito@realsoft.co.jp";
+            };
+            modules = [ ./nix/home/linux.nix ];
           };
-          modules = [ ./nix/home/linux.nix ];
         };
-      };
     };
 }
