@@ -1,0 +1,22 @@
+{
+  "fenced code block": {
+    "prefix": "code",
+    "body": ["```${1:lang}", "$0", "```"],
+    "description": "fenced code block"
+  },
+  "link": {
+    "prefix": "link",
+    "body": ["[${1:text}](${2:url})"],
+    "description": "link"
+  },
+  "table": {
+    "prefix": "table",
+    "body": ["| ${1:col1} | ${2:col2} |", "| --- | --- |", "| $3 | $4 |"],
+    "description": "2-column table"
+  },
+  "details": {
+    "prefix": "details",
+    "body": ["<details>", "<summary>${1:summary}</summary>", "", "$0", "", "</details>"],
+    "description": "collapsible details"
+  }
+}

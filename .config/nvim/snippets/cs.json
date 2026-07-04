@@ -1,0 +1,27 @@
+{
+  "public class": {
+    "prefix": "cls",
+    "body": ["public class ${1:Name}", "{", "\t$0", "}"],
+    "description": "public class"
+  },
+  "public method": {
+    "prefix": "pm",
+    "body": ["public ${1:void} ${2:Method}(${3})", "{", "\t$0", "}"],
+    "description": "public method"
+  },
+  "auto property": {
+    "prefix": "prop",
+    "body": ["public ${1:string} ${2:Name} { get; set; }"],
+    "description": "auto-implemented property"
+  },
+  "Console.WriteLine": {
+    "prefix": "cw",
+    "body": ["Console.WriteLine($1);"],
+    "description": "Console.WriteLine"
+  },
+  "async Task method": {
+    "prefix": "pma",
+    "body": ["public async Task ${1:Method}(${2})", "{", "\t$0", "}"],
+    "description": "public async Task method"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "console.log": {
+    "prefix": "clg",
+    "body": ["console.log($1);"],
+    "description": "console.log"
+  },
+  "arrow function": {
+    "prefix": "afn",
+    "body": ["const ${1:name} = (${2:args}) => {", "\t$0", "};"],
+    "description": "arrow function"
+  },
+  "async arrow function": {
+    "prefix": "afna",
+    "body": ["const ${1:name} = async (${2:args}) => {", "\t$0", "};"],
+    "description": "async arrow function"
+  },
+  "try/catch": {
+    "prefix": "try",
+    "body": ["try {", "\t$1", "} catch (${2:err}) {", "\t$0", "}"],
+    "description": "try/catch"
+  },
+  "interface": {
+    "prefix": "iface",
+    "body": ["interface ${1:Name} {", "\t$0", "}"],
+    "description": "interface"
+  }
+}

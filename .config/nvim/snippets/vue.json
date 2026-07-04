@@ -1,0 +1,33 @@
+{
+  "SFC script setup": {
+    "prefix": "vbase",
+    "body": [
+      "<script setup lang=\"ts\">",
+      "$1",
+      "</script>",
+      "",
+      "<template>",
+      "\t<div>$0</div>",
+      "</template>",
+      "",
+      "<style scoped>",
+      "</style>"
+    ],
+    "description": "Vue SFC (<script setup lang=ts>)"
+  },
+  "ref": {
+    "prefix": "ref",
+    "body": ["const ${1:name} = ref(${2:value});"],
+    "description": "ref()"
+  },
+  "computed": {
+    "prefix": "cmpt",
+    "body": ["const ${1:name} = computed(() => $0);"],
+    "description": "computed()"
+  },
+  "onMounted": {
+    "prefix": "onmounted",
+    "body": ["onMounted(() => {", "\t$0", "});"],
+    "description": "onMounted()"
+  }
+}
