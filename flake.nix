@@ -54,13 +54,25 @@
 
       flake =
         let
+          # 全 nixpkgs import で共有する config。
+          # permittedInsecurePackages: vue-language-server がビルド時に pnpm 10.34.0 を
+          # 名指しで使う（nixpkgs 側で pnpm_10_34_0 に固定）。この版は CVE で insecure
+          # 指定されたが、パッチ版(10.34.4/11)は integrity 無しの tarball インストールを
+          # 拒否し、vue の lockfile がまさにそれに依存しているためビルドできない。
+          # pnpm はサンドボックス内ビルドでしか動かず実行時クロージャには入らないので、
+          # この版だけ許可する。上流が lockfile を修正して pin が外れたら削除してよい。
+          nixpkgsConfig = {
+            allowUnfree = true;
+            permittedInsecurePackages = [ "pnpm-10.34.0" ];
+          };
+
           # nixpkgs-master（bleeding edge）を任意 system 向けに import するヘルパー。
           # claude-code など master 追従したいパッケージ用。darwin / WSL で共用する。
           mkMaster =
             system:
             import inputs.nixpkgs-master {
               inherit system;
-              config.allowUnfree = true;
+              config = nixpkgsConfig;
             };
 
           # ホストごとに異なるアイデンティティはここに集約する。
@@ -88,7 +100,7 @@
               ./nix/modules/darwin
               home-manager.darwinModules.home-manager
               {
-                nixpkgs.config.allowUnfree = true;
+                nixpkgs.config = nixpkgsConfig;
               }
               (
                 { pkgs, ... }:
@@ -118,7 +130,7 @@
           homeConfigurations."naito-7110@wsl" = home-manager.lib.homeManagerConfiguration {
             pkgs = import nixpkgs {
               system = "x86_64-linux";
-              config.allowUnfree = true;
+              config = nixpkgsConfig;
             };
             extraSpecialArgs = {
               pkgs-master = mkMaster "x86_64-linux";
