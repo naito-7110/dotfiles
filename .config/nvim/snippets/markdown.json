@@ -18,5 +18,30 @@
     "prefix": "details",
     "body": ["<details>", "<summary>${1:summary}</summary>", "", "$0", "", "</details>"],
     "description": "collapsible details"
+  },
+  "bold": {
+    "prefix": "bold",
+    "body": ["**${1:text}**"],
+    "description": "bold"
+  },
+  "italic": {
+    "prefix": "italic",
+    "body": ["*${1:text}*"],
+    "description": "italic"
+  },
+  "task list item": {
+    "prefix": "task",
+    "body": ["- [ ] $0"],
+    "description": "task checkbox"
+  },
+  "blockquote": {
+    "prefix": "quote",
+    "body": ["> $0"],
+    "description": "blockquote"
+  },
+  "image": {
+    "prefix": "img",
+    "body": ["![${1:alt}](${2:url})"],
+    "description": "image"
   }
 }
