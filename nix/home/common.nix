@@ -18,7 +18,13 @@
 
   programs = {
     starship.enable = true;
-    neovim.enable = true;
+    neovim = {
+      enable = true;
+      # Ruby / Python3 の host provider は使わないので明示的に無効化する。
+      # （stateVersion 26.05 で false が既定になる予定の non-legacy 挙動。警告も消える）
+      withRuby = false;
+      withPython3 = false;
+    };
     fzf.enable = true;
     direnv = {
       enable = true;

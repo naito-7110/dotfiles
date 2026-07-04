@@ -2,12 +2,12 @@
 
 ## TODO
 - [ ] CI で `nix flake check` を回して構成の破損を検知する
-- [ ] `programs.neovim.withPython3 = false` を明示して home-manager の非推奨警告を消す
 
 ### Done
 - [x] zsh を home-manager ネイティブ管理に (`nix/home/zsh.nix`、手動シンボリックは廃止)
 - [x] git 設定を `nix/home/git.nix` に移行して import
 - [x] neovim の LSP を nix で宣言 (`nix/home/lsp.nix`) して連携
+- [x] neovim の Ruby/Python3 provider を無効化して非推奨警告を解消
 
 ## Usage
 ### nix
