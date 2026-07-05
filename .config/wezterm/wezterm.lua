@@ -7,6 +7,13 @@ config.font_size = 12.0
 config.line_height = 1.0
 config.use_ime = true
 
+-- macOS では ~/works を起点に tmux へ自動アタッチ (セッション名: main)
+-- tmux は nix 管理のため PATH 解決にログインシェルを経由する
+if wezterm.target_triple:find("apple%-darwin") then
+	config.default_cwd = wezterm.home_dir .. "/works"
+	config.default_prog = { "/bin/zsh", "-l", "-c", "exec tmux new-session -A -s main" }
+end
+
 -- 透過設定
 local default_opacity = 0.65
 local min_opacity = 0.5
