@@ -51,6 +51,9 @@
 
       # ネストした tmux に prefix を送る
       bind C-q send-prefix
+
+      # 設定リロード
+      bind r source-file ~/.config/tmux/tmux.conf \; display-message "tmux.conf reloaded"
     '';
   };
 }
