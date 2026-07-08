@@ -6,20 +6,33 @@
   outputs =
     { self, nixpkgs }:
     let
-      system = "aarch64-darwin";
-      pkgs = import nixpkgs { inherit system; };
+      systems = [
+        "aarch64-darwin"
+        "x86_64-darwin"
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {
-      devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
-          bun
-          typescript-language-server
-          vscode-langservers-extracted
-        ];
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              bun
+              typescript-language-server
+              vscode-langservers-extracted
+            ];
 
-        shellHook = ''
-          echo "Bun: $(bun -v)"
-        '';
-      };
+            shellHook = ''
+              echo "Bun: $(bun -v)"
+            '';
+          };
+        }
+      );
     };
 }
