@@ -11,6 +11,51 @@ let
     exec /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe \
       -NoProfile -Command "Start-Process -- '$1'"
   '';
+
+  # Windows のスクショ (Win+Shift+S) はクリップボードに BI_BITFIELDS 形式の BMP として入り、
+  # WSLg がそのまま Linux 側クリップボードへ橋渡しする。Claude Code はこの BMP 変種を
+  # デコードできず、Ctrl+V / Alt+V での画像貼り付けが無言で失敗する。
+  #
+  # クリップボードに PNG を書き戻す方式は Claude 側のデコードに依存して不安定なため、
+  # 「画像をファイルに保存し、その @パス をテキストとしてクリップボードへ入れる」方式を採る。
+  # テキスト貼り付けは確実に動くので、Ctrl+V で `@/path/....png` が貼られ、
+  # Claude Code が @ 参照でファイルから画像を読む。ffmpeg は BI_BITFIELDS も正しく読める。
+  # 参考: https://qiita.com/k_izutani/items/98a5bc5601a7057ba51d
+  clipimg = pkgs.writeShellScriptBin "clipimg" ''
+    set -euo pipefail
+    # WezTerm(Windows) から wsl.exe 経由で最小 PATH で呼ばれても date/mkdir/grep/find が
+    # 解決できるよう、必要な coreutils 群を先頭に固定する。
+    export PATH=${pkgs.coreutils}/bin:${pkgs.gnugrep}/bin:${pkgs.findutils}/bin:$PATH
+    wl_paste=${pkgs.wl-clipboard}/bin/wl-paste
+    wl_copy=${pkgs.wl-clipboard}/bin/wl-copy
+    ffmpeg=${pkgs.ffmpeg}/bin/ffmpeg
+
+    dir="''${XDG_CACHE_HOME:-$HOME/.cache}/claude-screenshots"
+    mkdir -p "$dir"
+    # 7日より古い保存済みスクショを掃除して溜め込みを防ぐ（~/.cache は破棄前提の領域）。
+    find "$dir" -name 'ss_*.png' -mtime +7 -delete 2>/dev/null || true
+    out="$dir/ss_$(date +%Y%m%d_%H%M%S).png"
+
+    types=$("$wl_paste" --list-types 2>/dev/null || true)
+    if printf '%s\n' "$types" | grep -qx 'image/png'; then
+      "$wl_paste" --type image/png > "$out"
+    elif printf '%s\n' "$types" | grep -qx 'image/bmp'; then
+      "$wl_paste" --type image/bmp \
+        | "$ffmpeg" -loglevel error -i pipe:0 -c:v png -f image2pipe pipe:1 > "$out"
+    else
+      echo "clipimg: クリップボードに画像がありません (types: ''${types:-none})" >&2
+      exit 1
+    fi
+
+    # --stdout: @パスを stdout に出すだけ（WezTerm がこれを受け取りブラケットペーストする）。
+    # 既定: @パスをクリップボードにも入れる（!clipimg を手動実行して Ctrl+V する用途）。
+    if [ "''${1:-}" = "--stdout" ]; then
+      printf '@%s' "$out"
+    else
+      printf '@%s' "$out" | "$wl_copy"
+      echo "clipimg: $out を保存し、@パスをクリップボードに入れました。Ctrl+V で貼り付けてください。" >&2
+    fi
+  '';
 in
 {
   # WSL (Ubuntu) 上の standalone home-manager 用のホーム設定。
@@ -34,5 +79,6 @@ in
     gcc
     wl-clipboard
     wslview
+    clipimg
   ];
 }
