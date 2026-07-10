@@ -19,6 +19,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", {
+	-- config は nix store 経由の read-only シンボリックリンクなので、
+	-- lazy-lock.json は書き込み可能な state ディレクトリに逃がす
+	lockfile = vim.fn.stdpath("state") .. "/lazy-lock.json",
 	spec = {
 		-- Configure any other settings here. See the documentation for more details.
 		-- colorscheme that will be used when installing plugins.
