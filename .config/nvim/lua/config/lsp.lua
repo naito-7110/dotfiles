@@ -124,6 +124,10 @@ vim.lsp.config("tinymist", {
 vim.lsp.enable("tinymist")
 
 -- TypeScript (Vue plugin 同梱)
+-- 注意: vue_ls / ts_ls / @vue/typescript-plugin は必ずプロジェクトから供給し、
+-- vue-language-server と @vue/typescript-plugin のメジャーを一致させること。
+-- 世代がズレると hybrid-mode が壊れ v-on / v-bind 補完が死ぬ（静的ディレクティブは出る）。
+-- そのため nix グローバル(lsp.nix)には TS/Vue を置かない。devShell 供給が正。
 vim.lsp.config("ts_ls", {
 	filetypes = {
 		"javascript",
