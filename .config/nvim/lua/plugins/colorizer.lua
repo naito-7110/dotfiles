@@ -19,14 +19,15 @@ return {
 			"lua",
 		},
 		user_default_options = {
-			names = true, -- "Blue" などの色名も対象
+			-- css = true はまとめ有効化で names(色名)も強制 ON にしてしまい、
+			-- コメントや変数名の "red"/"blue" まで色付いて邪魔なので使わない。
+			-- コード形式(hex / rgb / hsl)だけを個別に有効化する。
+			names = false, -- "Blue" などの色名は対象にしない
 			RGB = true, -- #RGB
 			RRGGBB = true, -- #RRGGBB
 			RRGGBBAA = true, -- #RRGGBBAA
 			rgb_fn = true, -- rgb() / rgba()
 			hsl_fn = true, -- hsl() / hsla()
-			css = true, -- css 系機能を一括有効化
-			css_fn = true, -- css の関数記法を有効化
 			tailwind = true, -- Tailwind の色クラス
 			mode = "background", -- 背景色として色を表示
 		},
