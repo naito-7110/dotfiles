@@ -57,6 +57,9 @@
 
       ffmpeg
       poppler-utils
+
+      # Neovim スタート画面のロゴアニメーション用 (tte)
+      terminaltexteffects
     ];
   };
 }
