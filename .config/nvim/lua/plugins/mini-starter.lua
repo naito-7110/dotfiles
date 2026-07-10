@@ -21,18 +21,25 @@ local logo = [[
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ]]
 
+-- 確定後のロゴに乗せるネオングラデーション (サイバーパンク配色)
+local neon = " --final-gradient-stops ff00c1 9600ff 00b8ff 00fff9 --final-gradient-direction diagonal"
+
 -- 表示に使う tte のエフェクト（グローバルオプション + サブコマンド）からランダムに1個を使用
--- いずれも実測 2〜7 秒程度で完走するよう速度調整済み
+-- いずれも実測 0.7〜3.6 秒で完走するよう速度調整済み
+-- (synthgrid だけ final-gradient 系フラグ非対応なので個別にグラデーション指定)
 local subcommands = {
-	"middleout --center-movement-speed 1.5 --full-movement-speed 0.5",
-	"slide --merge --movement-speed 1.5",
-	"beams --beam-delay 2 --beam-row-speed-range 40-80 --beam-column-speed-range 12-20",
-	"unstable",
-	"--frame-rate 200 blackhole",
-	"--frame-rate 200 vhstape --total-glitch-time 500",
-	"--frame-rate 200 orbittingvolley --launcher-movement-speed 0.8 --character-movement-speed 2",
-	"--frame-rate 250 burn",
-	"--frame-rate 200 fireworks --explode-anywhere --launch-delay 15 --firework-volume 0.04 --explode-distance 0.2",
+	"--frame-rate 200 middleout --center-movement-speed 3 --full-movement-speed 1" .. neon,
+	"--frame-rate 200 slide --merge --movement-speed 3" .. neon,
+	"--frame-rate 200 beams --beam-delay 1 --beam-row-speed-range 60-120 --beam-column-speed-range 20-40" .. neon,
+	"--frame-rate 250 unstable" .. neon,
+	"--frame-rate 300 vhstape --total-glitch-time 400" .. neon,
+	"--frame-rate 300 matrix --rain-time 1 --resolve-delay 1 --rain-column-delay-range 1-4" .. neon,
+	"--frame-rate 300 decrypt --typing-speed 12" .. neon,
+	"--frame-rate 400 blackhole" .. neon,
+	"--frame-rate 300 laseretch --etch-speed 3 --etch-delay 1" .. neon,
+	"--frame-rate 300 fireworks --explode-anywhere --launch-delay 8 --firework-volume 0.06 --explode-distance 0.2 --firework-colors ff00c1 9600ff 00b8ff 00fff9"
+		.. neon,
+	"--frame-rate 300 synthgrid --max-active-blocks 0.4 --grid-gradient-stops ff00c1 00fff9 --text-gradient-stops 9600ff 00b8ff 00fff9 --text-gradient-direction diagonal",
 }
 
 -- ロゴをフローティングウィンドウに描画する
@@ -72,11 +79,7 @@ local function display_logo()
 		local cmd = {
 			"sh",
 			"-c",
-			"printf '%s' "
-				.. vim.fn.shellescape(vim.trim(logo))
-				.. " | tte --anchor-canvas s "
-				.. subcommand
-				.. " --final-gradient-direction diagonal",
+			"printf '%s' " .. vim.fn.shellescape(vim.trim(logo)) .. " | tte --anchor-canvas s " .. subcommand,
 		}
 		-- 作成したバッファをターミナルとしてコマンドを実行
 		vim.api.nvim_buf_call(buf, function()
