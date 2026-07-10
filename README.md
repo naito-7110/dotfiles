@@ -22,6 +22,7 @@ nix flake init -t github:naito-7110/dotfiles#node
 ```
 
 ## Docs
+- [WSL 事前環境登録](./docs/wsl-setup.md)
 - [Neovim](./docs/neovim.md)
 - [AeroSpace](./docs/aerospace.md)
 
