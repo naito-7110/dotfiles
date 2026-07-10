@@ -34,6 +34,21 @@
     "body": ["- [ ] $0"],
     "description": "task checkbox"
   },
+  "todo item (unchecked)": {
+    "prefix": "todo",
+    "body": ["- [ ] $0"],
+    "description": "unchecked todo checkbox"
+  },
+  "done item (checked)": {
+    "prefix": "done",
+    "body": ["- [x] $0"],
+    "description": "checked todo checkbox"
+  },
+  "todo list block": {
+    "prefix": "todos",
+    "body": ["- [ ] ${1:task}", "- [ ] ${2:task}", "- [ ] ${3:task}"],
+    "description": "todo checklist block"
+  },
   "blockquote": {
     "prefix": "quote",
     "body": ["> $0"],
