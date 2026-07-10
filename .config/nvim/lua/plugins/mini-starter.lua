@@ -31,7 +31,6 @@ local subcommands = {
 	"--frame-rate 200 middleout --center-movement-speed 3 --full-movement-speed 1" .. neon,
 	"--frame-rate 200 slide --merge --movement-speed 3" .. neon,
 	"--frame-rate 200 beams --beam-delay 1 --beam-row-speed-range 60-120 --beam-column-speed-range 20-40" .. neon,
-	"--frame-rate 250 unstable" .. neon,
 	"--frame-rate 300 vhstape --total-glitch-time 400" .. neon,
 	"--frame-rate 300 matrix --rain-time 1 --resolve-delay 1 --rain-column-delay-range 1-4" .. neon,
 	"--frame-rate 300 decrypt --typing-speed 12" .. neon,
