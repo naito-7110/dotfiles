@@ -11,7 +11,8 @@ config.use_ime = true
 -- tmux は nix 管理のため PATH 解決にログインシェルを経由する
 if wezterm.target_triple:find("apple%-darwin") then
 	config.default_cwd = wezterm.home_dir .. "/works"
-	config.default_prog = { "/bin/zsh", "-l", "-c", "exec tmux new-session -A -s main" }
+	config.default_prog = { "/bin/zsh", "-l" }
+	-- config.default_prog = { "/bin/zsh", "-l", "-c", "exec tmux new-session -A -s main" }
 end
 
 -- 透過設定
