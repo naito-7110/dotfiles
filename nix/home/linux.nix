@@ -56,6 +56,18 @@ let
       echo "clipimg: $out を保存し、@パスをクリップボードに入れました。Ctrl+V で貼り付けてください。" >&2
     fi
   '';
+  # Windows 側の Chrome を occlusion 検出無効で起動する。
+  # Chrome は他ウィンドウに完全に覆われると描画を止めるが、この判定は透明度を見ない。
+  # そのため透過 wezterm を重ねると「隠れた」扱いで描画停止し、透過越しの動画が
+  # 真っ黒になる。CalculateNativeWinOcclusion を切ると覆われても描画を続ける。
+  # 注意: フラグはプロセス起動時にしか効かない。Chrome が既に起動中だと
+  # 既存プロセスに新規ウィンドウが乗るだけなので、完全終了してから使うこと。
+  chrome = pkgs.writeShellScriptBin "chrome" ''
+    # cmd.exe は Linux 側 cwd を UNC パスとして扱えず警告を出すので /mnt/c へ移る。
+    cd /mnt/c
+    exec /mnt/c/Windows/System32/cmd.exe /c start "" chrome \
+      --disable-features=CalculateNativeWinOcclusion "$@"
+  '';
 in
 {
   # WSL (Ubuntu) 上の standalone home-manager 用のホーム設定。
@@ -80,5 +92,6 @@ in
     wl-clipboard
     wslview
     clipimg
+    chrome
   ];
 }
