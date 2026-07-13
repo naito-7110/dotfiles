@@ -35,8 +35,6 @@ local subcommands = {
 	"--frame-rate 300 fireworks --explode-anywhere --launch-delay 8 --firework-volume 0.06 --explode-distance 0.2 --firework-colors ff00c1 9600ff 00b8ff 00fff9"
 		.. neon,
 	"--frame-rate 300 synthgrid --max-active-blocks 0.4 --grid-gradient-stops ff00c1 00fff9 --text-gradient-stops 9600ff 00b8ff 00fff9 --text-gradient-direction diagonal",
-	-- 雷 (kaminari): ⚡ϟ の電撃グリフが白熱→エレクトリックブルーで走り、紫へ収束する
-	"--frame-rate 300 beams --beam-row-symbols ⚡ ϟ / --beam-column-symbols ϟ ⚡ ⌇ --beam-delay 3 --beam-row-speed-range 80-140 --beam-column-speed-range 50-90 --beam-gradient-stops ffffff aef8ff 4d9fff --beam-gradient-steps 6 --beam-gradient-frames 2 --final-gradient-stops ffffff 4d9fff 9600ff --final-gradient-direction vertical --final-wipe-speed 4",
 }
 
 -- ロゴをフローティングウィンドウに描画する
