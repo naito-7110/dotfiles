@@ -5,16 +5,21 @@
     enable = true;
     enableCompletion = true;
 
-    shellAliases = {
-      vim = "nvim";
-      vi = "nvim";
-      v = "nvim";
+    # alias ではなく abbr で短縮する。Space/Enter で完全形に展開されるので、
+    # 実行前に本当のコマンドが見える・履歴に完全形で残る・コマンドを覚えられる。
+    zsh-abbr = {
+      enable = true;
+      abbreviations = {
+        vim = "nvim";
+        vi = "nvim";
+        v = "nvim";
 
-      c = "clear";
-      l = "ls -lah";
+        c = "clear";
+        l = "ls -lah";
 
-      gs = "git status";
-      gl = "git log --oneline --graph --decorate --all";
+        gs = "git status";
+        gl = "git log --oneline --graph --decorate --all";
+      };
     };
 
     initContent = ''
