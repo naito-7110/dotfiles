@@ -24,7 +24,7 @@ config.window_background_opacity = default_opacity
 config.macos_window_background_blur = 0
 
 function adjust_opacity(window, delta)
-	opacity = math.max(max_opacity, math.min(min_opacity, opacity + delta))
+	opacity = math.min(max_opacity, math.max(min_opacity, opacity + delta))
 
 	window:set_config_overrides({
 		window_background_opacity = opacity,
