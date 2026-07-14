@@ -2,6 +2,33 @@ return {
 	"nvim-lualine/lualine.nvim",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	config = function()
+		-- Show the current path: oil's browsing dir for oil buffers,
+		-- otherwise the file's path relative to cwd (with ~ for $HOME).
+		local function current_path()
+			if vim.bo.filetype == "oil" then
+				local ok, oil = pcall(require, "oil")
+				if ok then
+					local dir = oil.get_current_dir()
+					if dir then
+						return vim.fn.fnamemodify(dir, ":~")
+					end
+				end
+			end
+
+			local name = vim.api.nvim_buf_get_name(0)
+			if name == "" then
+				return "[No Name]"
+			end
+
+			local path = vim.fn.fnamemodify(name, ":~:.")
+			if vim.bo.modified then
+				path = path .. " [+]"
+			elseif vim.bo.readonly or not vim.bo.modifiable then
+				path = path .. " [-]"
+			end
+			return path
+		end
+
 		require("lualine").setup({
 			options = {
 				icons_enabled = true,
@@ -39,7 +66,7 @@ return {
 				lualine_a = { "mode" },
 				lualine_b = { "branch", "diff", "diagnostics" },
 				lualine_c = {
-					"filename",
+					{ current_path, icon = "" },
 				},
 				lualine_x = { "encoding", "fileformat", "filetype" },
 				lualine_y = { "progress" },
@@ -48,7 +75,7 @@ return {
 			inactive_sections = {
 				lualine_a = {},
 				lualine_b = {},
-				lualine_c = { "filename" },
+				lualine_c = { { current_path, icon = "" } },
 				lualine_x = { "location" },
 				lualine_y = {},
 				lualine_z = {},
