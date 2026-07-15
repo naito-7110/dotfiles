@@ -1,1 +1,1 @@
-require("commands.init-lua")
+require("commands.config")
