@@ -47,6 +47,7 @@
       fzf
       ripgrep
       fd
+      eza
       bat
       mise
       kubectl

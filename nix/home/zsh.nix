@@ -20,7 +20,10 @@
         v = "nvim";
 
         c = "clear";
-        l = "ls -lah";
+        # ls は eza に寄せる。アイコン・git status・ツリーが出る。
+        l = "eza -lah --icons --git";
+        ls = "eza --icons";
+        lt = "eza --tree --level=2 --icons";
 
         gs = "git status";
         gl = "git log --oneline --graph --decorate --all";
