@@ -9,6 +9,7 @@
   imports = [
     ./git.nix
     ./zsh.nix
+    ./eza.nix
     ./zoxide.nix
     ./lazygit.nix
     ./tmux.nix
@@ -52,7 +53,6 @@
       fzf
       ripgrep
       fd
-      eza
       jq
       yq-go
       mise

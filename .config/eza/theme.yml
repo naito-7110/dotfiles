@@ -1,0 +1,114 @@
+# eza の配色。既定は要素ごとに色が付きすぎて派手なので、
+# 「メタ情報は dim で沈める・意味のある差（種別/実行権/git）だけ色を残す」方針で抑える。
+# 色は名前指定を基本にして wezterm 側のカラースキームに追従させる。
+colourful: true
+
+# ファイル種別。ディレクトリ＝青、シンボリックリンク＝シアン、実行ファイル＝緑だけ立てる。
+filekinds:
+  normal: { foreground: Default }
+  directory: { foreground: Blue, is_bold: true }
+  symlink: { foreground: Cyan }
+  pipe: { foreground: Default, is_dimmed: true }
+  block_device: { foreground: Yellow }
+  char_device: { foreground: Yellow }
+  socket: { foreground: Default, is_dimmed: true }
+  special: { foreground: Default, is_dimmed: true }
+  executable: { foreground: Green }
+  mount_point: { foreground: Blue, is_underline: true }
+
+# パーミッションビット。r/w は素の色、実行ビットだけ緑。全体的に dim 気味。
+perms:
+  user_read: { foreground: Default }
+  user_write: { foreground: Default }
+  user_execute_file: { foreground: Green }
+  user_execute_other: { foreground: Green }
+  group_read: { foreground: Default, is_dimmed: true }
+  group_write: { foreground: Default, is_dimmed: true }
+  group_execute: { foreground: Default, is_dimmed: true }
+  other_read: { foreground: Default, is_dimmed: true }
+  other_write: { foreground: Default, is_dimmed: true }
+  other_execute: { foreground: Default, is_dimmed: true }
+  special_user_file: { foreground: Magenta }
+  special_other: { foreground: Default, is_dimmed: true }
+  attribute: { foreground: Default, is_dimmed: true }
+
+# サイズ。数値は素、単位は dim にして桁だけ目に入るようにする。
+size:
+  major: { foreground: Default }
+  minor: { foreground: Default, is_dimmed: true }
+  number_byte: { foreground: Default }
+  number_kilo: { foreground: Default }
+  number_mega: { foreground: Default }
+  number_giga: { foreground: Default }
+  number_huge: { foreground: Default }
+  unit_byte: { foreground: Default, is_dimmed: true }
+  unit_kilo: { foreground: Default, is_dimmed: true }
+  unit_mega: { foreground: Default, is_dimmed: true }
+  unit_giga: { foreground: Default, is_dimmed: true }
+  unit_huge: { foreground: Default, is_dimmed: true }
+
+# ユーザ／グループ。自分は素、他人・root は dim で沈める。
+users:
+  user_you: { foreground: Default }
+  user_other: { foreground: Default, is_dimmed: true }
+  user_root: { foreground: Default, is_dimmed: true }
+  group_yours: { foreground: Default, is_dimmed: true }
+  group_other: { foreground: Default, is_dimmed: true }
+  group_root: { foreground: Default, is_dimmed: true }
+
+# リンク数・inode・ブロックなどの補助情報は全部 dim。
+links:
+  normal: { foreground: Default, is_dimmed: true }
+  multi_link_file: { foreground: Yellow }
+
+git:
+  new: { foreground: Green }
+  modified: { foreground: Yellow }
+  deleted: { foreground: Red }
+  renamed: { foreground: Cyan }
+  typechange: { foreground: Magenta }
+  ignored: { foreground: Default, is_dimmed: true }
+  conflicted: { foreground: Red, is_bold: true }
+
+git_repo:
+  branch_main: { foreground: Default }
+  branch_other: { foreground: Magenta }
+  git_clean: { foreground: Green }
+  git_dirty: { foreground: Yellow }
+
+# 日付・inode・ブロック・区切り記号などのメタ情報は目立たせない。
+inode: { foreground: Default, is_dimmed: true }
+blocks: { foreground: Default, is_dimmed: true }
+date: { foreground: Default, is_dimmed: true }
+header: { foreground: Default, is_underline: true }
+punctuation: { foreground: Default, is_dimmed: true }
+symlink_path: { foreground: Cyan, is_dimmed: true }
+control_char: { foreground: Red }
+broken_symlink: { foreground: Red }
+broken_path_overlay: { foreground: Red, is_underline: true }
+
+# ファイル名の拡張子ベース着色。派手さの主因なので明るい原色は避け、
+# 種別ごとに落ち着いたトーンでゆるくグルーピングする。
+filenames: {}
+extensions:
+  # ドキュメント系
+  md: { foreground: Default }
+  txt: { foreground: Default }
+  # 画像・音・動画（メディアは同系のマゼンタで軽く）
+  jpg: { foreground: Magenta, is_dimmed: true }
+  jpeg: { foreground: Magenta, is_dimmed: true }
+  png: { foreground: Magenta, is_dimmed: true }
+  gif: { foreground: Magenta, is_dimmed: true }
+  svg: { foreground: Magenta, is_dimmed: true }
+  mp4: { foreground: Magenta, is_dimmed: true }
+  mp3: { foreground: Magenta, is_dimmed: true }
+  # アーカイブ（赤系で軽く）
+  zip: { foreground: Red, is_dimmed: true }
+  tar: { foreground: Red, is_dimmed: true }
+  gz: { foreground: Red, is_dimmed: true }
+  # 設定ファイル（黄系で軽く）
+  json: { foreground: Yellow, is_dimmed: true }
+  yaml: { foreground: Yellow, is_dimmed: true }
+  yml: { foreground: Yellow, is_dimmed: true }
+  toml: { foreground: Yellow, is_dimmed: true }
+  nix: { foreground: Cyan, is_dimmed: true }
