@@ -24,6 +24,8 @@
         l = "eza -lah --icons --git";
         ls = "eza --icons";
         lt = "eza --tree --level=2 --icons";
+        # cat は bat（シンタックスハイライト付き）。-pp で装飾なし素の表示。
+        cat = "bat -pp";
 
         gs = "git status";
         gl = "git log --oneline --graph --decorate --all";
