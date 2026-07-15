@@ -53,6 +53,8 @@
       ripgrep
       fd
       eza
+      jq
+      yq-go
       mise
       kubectl
       gh
