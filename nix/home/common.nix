@@ -10,6 +10,8 @@
     ./git.nix
     ./zsh.nix
     ./eza.nix
+    ./atuin.nix
+    ./nh.nix
     ./zoxide.nix
     ./lazygit.nix
     ./tmux.nix
@@ -47,10 +49,8 @@
     };
 
     # OS非依存の共通パッケージ。OS固有は darwin.nix / linux.nix で追加する。
+    # fzf / direnv / nix-direnv は programs.*.enable で入るのでここには重複させない。
     packages = with pkgs; [
-      direnv
-      nix-direnv
-      fzf
       ripgrep
       fd
       jq
@@ -59,6 +59,14 @@
       kubectl
       gh
       git-secrets
+
+      # モダン CLI 置換（eza/bat/fd/rg と同路線）。abbr は du/df/top を zsh.nix で張る。
+      dust # du:  容量をバーグラフ付きツリーで
+      duf # df:  ディスク使用量を色付きテーブルで
+      procs # ps:  プロセスを色付き＋検索で（`procs <query>`）
+      btop # top: 対話モニタ
+      sd # sed: 置換特化のモダン文法（`sd 'foo' 'bar'`）
+      tealdeer # tldr: コマンド使用例（`tldr tar`）
 
       pkgs-master.claude-code
 
