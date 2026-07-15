@@ -5,6 +5,11 @@
     enable = true;
     enableCompletion = true;
 
+    # 履歴からのゴースト補完。表示された候補は → / End で確定できる。
+    autosuggestion.enable = true;
+    # 打ちながらコマンドの正誤・引用符の対応が色で分かる。zsh-abbr の展開とも共存する。
+    syntaxHighlighting.enable = true;
+
     # alias ではなく abbr で短縮する。Space/Enter で完全形に展開されるので、
     # 実行前に本当のコマンドが見える・履歴に完全形で残る・コマンドを覚えられる。
     zsh-abbr = {
