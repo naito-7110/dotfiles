@@ -35,7 +35,16 @@
 
       perSystem =
         { system, pkgs, ... }:
+        let
+          vitaly = pkgs.callPackage ./nix/pkgs/vitaly.nix { };
+        in
         {
+          # `nix build .#vitaly` などで単体ビルドできるように公開する
+          packages = {
+            inherit vitaly;
+            cornix-sync = pkgs.callPackage ./nix/pkgs/cornix-sync.nix { inherit vitaly; };
+          };
+
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               lua-language-server

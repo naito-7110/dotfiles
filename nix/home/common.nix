@@ -70,6 +70,11 @@
 
       pkgs-master.claude-code
 
+      # Cornix キーマップ同期 (cornix push/pull/diff)。vitaly は nix/pkgs で自前ビルド
+      (pkgs.callPackage ../pkgs/cornix-sync.nix {
+        vitaly = pkgs.callPackage ../pkgs/vitaly.nix { };
+      })
+
       ffmpeg
       poppler-utils
 
