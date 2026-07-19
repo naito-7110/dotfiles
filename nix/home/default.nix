@@ -10,7 +10,6 @@
 
     packages = with pkgs; [
       docker
-      vscode
       texliveFull
     ];
   };
