@@ -1,5 +1,9 @@
 .direnv
 
+# nix build 成果物
+result
+result-*
+
 # Windows filesystem metadata (WSL)
 *Zone.Identifier
 
