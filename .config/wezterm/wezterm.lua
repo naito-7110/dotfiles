@@ -7,6 +7,11 @@ config.font_size = 12.0
 config.line_height = 1.0
 config.use_ime = true
 
+-- 透過は下げたまま文字の「薄さ」を潰す描画設定（opacity は据え置き）
+config.freetype_load_target = "Light"
+config.freetype_render_target = "HorizontalLcd"
+config.bold_brightens_ansi_colors = true
+
 -- macOS では ~/works を起点に tmux へ自動アタッチ (セッション名: main)
 -- tmux は nix 管理のため PATH 解決にログインシェルを経由する
 if wezterm.target_triple:find("apple%-darwin") then
