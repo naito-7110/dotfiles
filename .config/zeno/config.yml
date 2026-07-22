@@ -1,0 +1,42 @@
+# zeno.zsh のスニペット定義。Ctrl-Space で fzf ピッカーが開き、選ぶと本文が挿入される。
+# {{ }} はプレースホルダで、挿入後 Ctrl-G で次のプレースホルダへ飛べる。
+#
+# 注意: auto-snippet（スペースで keyword 展開）は zsh-abbr と衝突するため、このリポジトリでは
+# キー割り当てしていない（zeno.nix 参照）。keyword は将来 auto-snippet に寄せる場合の
+# 参考として残しているだけで、今は insert-snippet ピッカーの本文（snippet）だけが効く。
+snippets:
+  - name: git commit -m
+    keyword: gcm
+    snippet: git commit -m '{{message}}'
+
+  - name: git commit --amend --no-edit
+    keyword: gca
+    snippet: git commit --amend --no-edit
+
+  - name: git switch -c (new branch)
+    keyword: gsc
+    snippet: git switch -c {{branch}}
+
+  - name: git log (graph oneline)
+    keyword: glg
+    snippet: git log --oneline --graph --decorate --all
+
+  - name: nh home switch
+    snippet: nh home switch
+
+  - name: nh darwin switch
+    snippet: nh darwin switch
+
+  - name: kubectl get pods
+    keyword: kgp
+    snippet: kubectl get pods {{options}}
+
+  - name: kubectl logs -f
+    snippet: kubectl logs -f {{pod}}
+
+  - name: redirect to /dev/null
+    keyword: "null"
+    snippet: ">/dev/null 2>&1"
+
+  - name: mp4 -> gif (mp4gif)
+    snippet: mp4gif {{input.mp4}} {{width}} {{fps}} {{speed}}

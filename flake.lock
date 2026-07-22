@@ -110,7 +110,24 @@
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-master": "nixpkgs-master"
+        "nixpkgs-master": "nixpkgs-master",
+        "zeno-zsh": "zeno-zsh"
+      }
+    },
+    "zeno-zsh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1775355942,
+        "narHash": "sha256-05+w1WP/SHKp97JTGsvO3csI123U7py+fVSKnAWiUNY=",
+        "owner": "yuki-yano",
+        "repo": "zeno.zsh",
+        "rev": "2e8fbecce0fc3692a5fcc9033ecca7ab35263e56",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yuki-yano",
+        "repo": "zeno.zsh",
+        "type": "github"
       }
     }
   },

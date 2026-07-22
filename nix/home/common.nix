@@ -12,6 +12,7 @@
     ./eza.nix
     ./atuin.nix
     ./nh.nix
+    ./zeno.nix
     ./zoxide.nix
     ./lazygit.nix
     ./tmux.nix

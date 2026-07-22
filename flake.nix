@@ -15,6 +15,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # zeno.zsh は nixpkgs 未収録なので GitHub から直接取る（プラグイン素材なので flake=false）。
+    # 実体は zsh.nix ではなく zeno.nix が extraSpecialArgs 経由で受け取る。
+    zeno-zsh = {
+      url = "github:yuki-yano/zeno.zsh";
+      flake = false;
+    };
   };
 
   outputs =
@@ -126,6 +133,7 @@
                   home-manager.useUserPackages = true;
                   home-manager.extraSpecialArgs = {
                     inherit pkgs-master;
+                    zenoSrc = inputs.zeno-zsh;
                   }
                   // host;
                   home-manager.users.${host.username} = import ./nix/home;
@@ -143,6 +151,7 @@
             };
             extraSpecialArgs = {
               pkgs-master = mkMaster "x86_64-linux";
+              zenoSrc = inputs.zeno-zsh;
             }
             // hosts.wsl;
             modules = [ ./nix/home/linux.nix ];
