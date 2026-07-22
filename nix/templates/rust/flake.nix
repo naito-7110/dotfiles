@@ -25,6 +25,7 @@
             packages = with pkgs; [
               rustc
               cargo
+              rustfmt
               rust-analyzer
               lldb
             ];
