@@ -28,6 +28,9 @@
               rust-analyzer
               lldb
             ];
+            shellHook = ''
+              git init
+            '';
           };
         }
       );
