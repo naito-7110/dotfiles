@@ -27,7 +27,12 @@
     run chmod -R u+w "${config.home.homeDirectory}/.local/share/zeno"
   '';
 
-  home.sessionVariables.ZENO_ROOT = "${config.home.homeDirectory}/.local/share/zeno";
+  # sessionVariables (hm-session-vars.sh) は __HM_SESS_VARS_SOURCED ガードで一度しか
+  # 読まれないため、切替前から生きている tmux サーバー配下の新ペインでは ZENO_ROOT が
+  # 未設定のまま store 直参照に戻ってしまう。ガードの外 (.zshenv) で毎回 export する。
+  programs.zsh.envExtra = ''
+    export ZENO_ROOT="${config.home.homeDirectory}/.local/share/zeno"
+  '';
 
   programs.zsh.plugins = [
     {
