@@ -5,6 +5,19 @@
   homeDirectory,
   ...
 }:
+let
+  # カレントディレクトリを簡易 HTTP サーバーで配信しブラウザで開く。
+  # WSL は $BROWSER=wslview、macOS は未設定なので open にフォールバック。
+  preview = pkgs.writeShellScriptBin "preview" ''
+    dir="''${1:-.}"
+    file="''${2:-}"
+    port="''${3:-8787}"
+    cd "$dir" || exit 1
+    echo "Serving $(pwd) on http://localhost:$port/$file"
+    "''${BROWSER:-open}" "http://localhost:$port/$file" &
+    exec ${pkgs.python3}/bin/python3 -m http.server "$port"
+  '';
+in
 {
   imports = [
     ./git.nix
@@ -70,6 +83,8 @@
       tealdeer # tldr: コマンド使用例（`tldr tar`）
 
       pkgs-master.claude-code
+
+      preview
 
       ffmpeg
       poppler-utils

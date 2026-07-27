@@ -59,6 +59,45 @@ vim.keymap.set("n", "<leader>lL", function()
 	vim.cmd("edit " .. vim.lsp.get_log_path())
 end, { desc = "Open LSP log file" })
 
+-- HTML preview: カレントファイルのディレクトリで HTTP サーバーを起動しブラウザで開く
+local preview_job_id = nil
+
+local function stop_preview()
+	if preview_job_id then
+		vim.fn.jobstop(preview_job_id)
+		preview_job_id = nil
+	end
+end
+
+vim.keymap.set("n", "<leader>pv", function()
+	local dir, filename
+
+	local ok, oil = pcall(require, "oil")
+	if ok and vim.bo.filetype == "oil" then
+		dir = oil.get_current_dir()
+		local entry = oil.get_cursor_entry()
+		filename = entry and entry.name or ""
+	else
+		local bufpath = vim.fn.expand("%:p")
+		if bufpath == "" then
+			vim.notify("No file to preview", vim.log.levels.WARN)
+			return
+		end
+		dir = vim.fn.fnamemodify(bufpath, ":h")
+		filename = vim.fn.fnamemodify(bufpath, ":t")
+	end
+
+	stop_preview()
+	preview_job_id = vim.fn.jobstart({ "preview", dir, filename }, {
+		on_exit = function()
+			preview_job_id = nil
+		end,
+	})
+	vim.notify("Preview: http://localhost:8787/" .. filename)
+end, { desc = "Preview HTML in browser" })
+
+vim.api.nvim_create_autocmd("VimLeavePre", { callback = stop_preview })
+
 -- DAP (debugger)
 vim.keymap.set("n", "<leader>du", function()
 	require("dapui").toggle()
