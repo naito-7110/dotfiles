@@ -49,6 +49,15 @@
       bind k select-pane -U
       bind l select-pane -R
 
+      # prefix + Space (next-layout) を無効化
+      # → 誤爆でペイン配置が勝手に変わるのを防ぐ
+      unbind Space
+
+      # レイアウトを直前の状態に戻す (誤爆時のリカバリ)
+      bind M-Space select-layout -o
+      # レイアウト切り替えが必要なときは意図的に押しにくいキーで
+      bind M-l next-layout
+
       # ネストした tmux に prefix を送る
       bind C-q send-prefix
 
