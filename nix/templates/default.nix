@@ -11,6 +11,10 @@
     path = ./csharp;
     description = "C# (dotnet SDK + roslyn-ls)";
   };
+  dotnet = {
+    path = ./dotnet;
+    description = "dotnet (C# + VB.NET)";
+  };
   typst = {
     path = ./typst;
     description = "typst";
