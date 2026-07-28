@@ -8,7 +8,8 @@
 
 | Lang | Server | 提供元 |
 |------|--------|--------|
-| C# | roslyn-ls | dotnet devShell |
+| C# | roslyn-ls | dotnet / csharp devShell |
+| VB.NET | (無し) | ビルド → quickfix で代替。[.NET](#net-c--vbnet) 参照 |
 | Rust | rust-analyzer | rust devShell |
 | TypeScript / Vue | ts_ls, vue_ls | node devShell |
 | Lua | lua_ls | root devShell |
@@ -27,6 +28,35 @@
 | `<leader>rn` | rename symbol |
 | `<leader>ca` | code action |
 | `[d` / `]d` | prev / next diagnostic |
+
+## .NET (C# / VB.NET)
+
+### VB に LSP が無い問題
+nixpkgs の LSP はどれも VB を扱えない。roslyn-ls も omnisharp-roslyn も Roslyn の
+C# 側だけを載せており `Microsoft.CodeAnalysis.VisualBasic.*` を同梱していない
+(omnisharp は `.vb` を開いても補完ゼロ、`.vbproj` をロードしようともしない)。
+VB 専用の [vb-ls](https://github.com/CoolCoderSuper/visualbasic-language-server) は
+存在するが nixpkgs 未収録。
+
+そこで `.vb` の型チェックはビルド出力を quickfix に流して行う
+(`lua/commands/dotnet.lua`)。**LSP が入ってもこの経路は残す** — サーバー側が
+受け付ける言語バージョンの確認はコンパイラでしかできない。
+
+| Key | Action |
+|-----|--------|
+| `<leader>bb` | `:DotnetBuild` — ビルド → quickfix (`:cnext` / `:cprev` で該当行へ) |
+
+- ビルド対象はバッファに一番近い `*.vbproj` / `*.csproj`、無ければ `*.slnx` / `*.sln`
+- **devShell に入って使う前提。** `dotnet` が PATH に無い場合は
+  `nix develop --command` にフォールバックするが nix の評価で毎回待たされる
+- auto-save と併用すると保存ごとにビルドが走るため、自動実行はしていない
+- 診断の形をしていない失敗 (restore エラー等) は生ログを quickfix に出す
+
+### シンタックスハイライト
+`.vb` は同梱の `syntax/vb.vim` で filetype `vb` として色が付くが、これは VB6 世代で
+`Imports` / `Class` / `Inherits` / `Try` / `Of` などを知らない。
+`after/syntax/vb.vim` で VB.NET のキーワードを補っている
+(treesitter に VB グラマーは無い)。
 
 ## Markdown
 | Plugin | 役割 |
