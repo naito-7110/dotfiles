@@ -7,9 +7,9 @@
     path = ./rust;
     description = "rust";
   };
-  dotnet = {
-    path = ./dotnet;
-    description = "dotnet";
+  csharp = {
+    path = ./csharp;
+    description = "C# (dotnet SDK + roslyn-ls)";
   };
   typst = {
     path = ./typst;
