@@ -8,43 +8,58 @@ direnv allow
 | 同梱 | 用途 |
 |------|------|
 | `dotnetCorePackages.sdk_10_0` | `dotnet build` / `dotnet test`（C# も VB も同じコンパイラ基盤） |
-| `roslyn-ls` | **C# のみ**の LSP |
+| `roslyn-ls` | **C# 用**の LSP |
+| `vb-ls` (0.4.0) | **VB.NET 用**の LSP。nixpkgs 未収録なのでこの flake 内で自前パッケージング |
 | `ilspycmd` | 参照 DLL のデコンパイル（API 参照用） |
 
 C# だけのプロジェクトは `csharp` テンプレートで足りる。VB.NET (`.vbproj`) が
 混ざるならこちらを使う。
 
-## VB.NET の扱い
+## VB.NET の LSP について
 
-**nixpkgs の LSP はどれも VB を扱えない。** roslyn-ls / omnisharp-roslyn はいずれも
-Roslyn の C# 側だけを載せており `Microsoft.CodeAnalysis.VisualBasic.*` を持たない
+**nixpkgs には VB を扱える LSP が無い。** roslyn-ls も omnisharp-roslyn も Roslyn の
+C# 側だけを載せており、`Microsoft.CodeAnalysis.VisualBasic.*` を同梱していない
 （omnisharp は `.vb` を開いても補完ゼロ、`.vbproj` をロードしようともしない）。
-VS Code の C# 拡張も同じ。
 
-VB 専用の LSP としては
-[vb-ls](https://github.com/CoolCoderSuper/visualbasic-language-server)（Roslyn ベース）が
-存在するが nixpkgs 未収録で、使うなら dotnet tool として持ち込む必要がある。
+そこで [vb-ls](https://github.com/CoolCoderSuper/visualbasic-language-server) を
+NuGet の dotnet tool から展開して入れている。中身は
+`Microsoft.CodeAnalysis.LanguageServer`（VS Code の C# 拡張や nixpkgs roslyn-ls と
+同じ公式 Roslyn LSP）に **VB の Roslyn アセンブリを同梱し直したもの**。
+net10.0 ターゲットなので同梱の SDK 10 でそのまま動く。
 
-LSP の有無にかかわらず、この構成では型チェックをビルドで行う。サーバー側が
-受け付ける言語バージョンの確認はコンパイラでしかできないため、この経路は常に要る。
+補完・ホバー・`BC*` の実時間診断が効く。Neovim 側の設定は dotfiles の
+`.config/nvim/lua/config/lsp.lua`（`vb_ls`）。**`solution/open` を送らないと
+機能がまるごと出ない**サーバなので、設定を書き直すときは `docs/neovim.md` を読むこと。
 
-1. **型チェックはビルドで行う。** devShell に入っていれば Neovim の
-   `<leader>bb`（`:DotnetBuild`）が `dotnet build` を走らせ、
-   `Foo.vb(20,32): error BC30456: ...` を quickfix に載せる。
-   `:cnext` / `:cprev` で該当行へ飛べる
-2. **API 参照はデコンパイル結果を grep する。** 補完が出ない分、
-   実物のシグネチャをソースとして読む
+### 更新のしかた
+nixpkgs 未収録なので手動。`flake.nix` の version と hash を両方直す:
+
+```sh
+nix store prefetch-file https://www.nuget.org/api/v2/package/vb-ls/<新しいバージョン>
+```
+
+nixpkgs に入ったら flake 内の derivation は消して `pkgs.vb-ls` に差し替えてよい。
+
+## ビルド → quickfix
+
+LSP とは別に、Neovim の `<leader>bb`（`:DotnetBuild`）でコンパイラを直接叩ける。
+**LSP があっても要る**: サーバー側が受け付ける言語バージョンの確認や
+ソリューション全体の最終確認はコンパイラでしかできない。
+
+`dotnet` が PATH に無いと `nix develop --command` にフォールバックして毎回
+nix の評価を待つので、**devShell に入って使うのが前提**。
+
+## API 参照
+
+補完だけで足りないとき（デコンパイルして実装を読む）:
 
 ```sh
 ilspycmd -p -o reference/decompiled/<Name> libs/<Name>.dll
 grep -rn "class FormScript" reference/decompiled/
 ```
 
-3. シンタックスハイライトは Neovim 同梱の `syntax/vb.vim`（VB6 世代）＋
-   dotfiles 側の `after/syntax/vb.vim`（VB.NET キーワードの追加）で効く
+## シンタックスハイライト
 
-## 注意
-
-`dotnet` が PATH に無い状態（devShell 外）から `:DotnetBuild` を呼ぶと
-`nix develop --command dotnet build` にフォールバックするが、nix の評価で
-毎回待たされる。**devShell に入って使うのが前提。**
+`.vb` は Neovim 同梱の `syntax/vb.vim` で色が付くが VB6 世代で `Imports` / `Class` /
+`Inherits` / `Try` / `Of` を知らない。dotfiles の `after/syntax/vb.vim` で補っている
+（treesitter に VB グラマーは無い）。
