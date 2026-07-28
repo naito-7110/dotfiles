@@ -1,11 +1,10 @@
 -- ####################
 --    dotnet build -> quickfix
 -- ####################
--- nixpkgs の LSP はどれも VB を扱えない（roslyn-ls / omnisharp-roslyn はどちらも
--- Microsoft.CodeAnalysis.VisualBasic.* を同梱していない）。VB 専用の vb-ls は
--- nixpkgs 未収録なので、`.vb` の型チェックは「ビルド出力を quickfix に流す」で担保する。
--- LSP が入っても、サーバー側が受け付ける言語バージョンの確認はコンパイラでしかできない
--- ため、この経路は残す。C# でも roslyn-ls の見ていないプロジェクトのエラーを拾える。
+-- LSP（C# は roslyn_ls、VB は vb_ls）とは別に、コンパイラを直接叩く経路。
+-- LSP があっても要る: デプロイ先が受け付ける言語バージョンの確認や、
+-- ソリューション全体の最終確認はコンパイラでしかできない。
+-- LSP が供給されていない環境（devShell 外）でも型チェックだけは通せる、という保険でもある。
 
 -- MSBuild / vbc / csc のエラー行（実測）:
 --   /abs/Items.vb(20,32): error BC30456: 'X' is not a member of 'Y'. [/abs/Proj.vbproj]

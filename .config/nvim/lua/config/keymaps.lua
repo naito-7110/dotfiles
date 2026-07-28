@@ -43,7 +43,8 @@ vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 
--- dotnet build → quickfix。VB.NET は nixpkgs に LSP が無いため、これが型チェックの本線。
+-- dotnet build → quickfix。LSP とは別に、デプロイ先が受け付ける言語バージョンの確認や
+-- ソリューション全体の最終確認に使う。
 -- auto-save と組み合わせると保存ごとにビルドが走って重いので、自動化せず明示実行にしている。
 vim.keymap.set("n", "<leader>bb", ":DotnetBuild<CR>", { silent = true, desc = "dotnet build → quickfix" })
 

@@ -9,7 +9,7 @@
 | Lang | Server | 提供元 |
 |------|--------|--------|
 | C# | roslyn-ls | dotnet / csharp devShell |
-| VB.NET | (無し) | ビルド → quickfix で代替。[.NET](#net-c--vbnet) 参照 |
+| VB.NET | vb-ls | dotnet devShell (nixpkgs 未収録のため[自前パッケージング](#vbnet-の-lsp-vb_ls)) |
 | Rust | rust-analyzer | rust devShell |
 | TypeScript / Vue | ts_ls, vue_ls | node devShell |
 | Lua | lua_ls | root devShell |
@@ -31,16 +31,39 @@
 
 ## .NET (C# / VB.NET)
 
-### VB に LSP が無い問題
-nixpkgs の LSP はどれも VB を扱えない。roslyn-ls も omnisharp-roslyn も Roslyn の
+### VB.NET の LSP (vb_ls)
+**nixpkgs には VB を扱える LSP が無い。** roslyn-ls も omnisharp-roslyn も Roslyn の
 C# 側だけを載せており `Microsoft.CodeAnalysis.VisualBasic.*` を同梱していない
 (omnisharp は `.vb` を開いても補完ゼロ、`.vbproj` をロードしようともしない)。
-VB 専用の [vb-ls](https://github.com/CoolCoderSuper/visualbasic-language-server) は
-存在するが nixpkgs 未収録。
 
-そこで `.vb` の型チェックはビルド出力を quickfix に流して行う
-(`lua/commands/dotnet.lua`)。**LSP が入ってもこの経路は残す** — サーバー側が
-受け付ける言語バージョンの確認はコンパイラでしかできない。
+代わりに **[vb-ls](https://github.com/CoolCoderSuper/visualbasic-language-server) 0.4.0** を
+`nix/templates/dotnet` の devShell で自前パッケージングして使う。中身は
+`Microsoft.CodeAnalysis.LanguageServer` (VS Code の C# 拡張や nixpkgs roslyn-ls と同じ
+公式 Roslyn LSP) に **VB の Roslyn アセンブリを同梱し直したもの**。だから roslyn_ls と
+同じ流儀で動く。net10.0 ターゲットなので SDK 10 でそのまま走る。
+
+実測 (Infor SyteLine の実物フォームスクリプト 1,346行に対して):
+`ThisForm.` で **68件の実 Mongoose API 補完**、`Inherits FormScript` のホバーが
+`Class Mongoose.Scripting.FormScript` を解決、`ThisForm.NoSuchMethod()` が
+**保存前に** `BC30456 'NoSuchMethod' is not a member of 'IWSForm'` として出る。
+
+#### 実装上のハマりどころ 2点
+1. **このサーバは rootUri からプロジェクトを自動で開かない。** `initialize` 後に
+   カスタム通知 `solution/open` を送るまで、接続はできても補完・ホバーが
+   まるごとゼロのまま (構文解析ベースの IDExxxx 診断だけが出るので気付きにくい)。
+   `lua/config/lsp.lua` の `on_attach` で送っている。
+   C# 側は nvim-lspconfig が同じことをやってくれるので roslyn_ls には不要。
+2. **`root_markers` はグロブを解決しない。** `{ "*.slnx" }` を渡すと `root_dir` が
+   `nil` になり 1 に落ちる。`root_dir` を関数にして上方向探索している。
+3. **nixpkgs 未収録なので更新は手動。** テンプレートの `flake.nix` で NuGet の
+   nupkg をハッシュ固定して展開している。上げるときは version と hash を両方直す:
+   `nix store prefetch-file https://www.nuget.org/api/v2/package/vb-ls/<新版>`
+   (nixpkgs に入ったらこの derivation は消してよい)
+
+### ビルド → quickfix
+LSP とは別に、コンパイラを直接叩く経路も用意してある。**LSP があっても消さない** —
+サーバー側 (Infor テナント等) が受け付ける言語バージョンの確認や、ソリューション全体の
+最終確認はコンパイラでしかできない。
 
 | Key | Action |
 |-----|--------|
@@ -51,6 +74,8 @@ VB 専用の [vb-ls](https://github.com/CoolCoderSuper/visualbasic-language-serv
   `nix develop --command` にフォールバックするが nix の評価で毎回待たされる
 - auto-save と併用すると保存ごとにビルドが走るため、自動実行はしていない
 - 診断の形をしていない失敗 (restore エラー等) は生ログを quickfix に出す
+- MSBuild の差分ビルドの都合で、変更なしで再実行すると**警告は消える** (コンパイル自体が
+  スキップされるため)。エラーは出力が生成されないので毎回出る
 
 ### シンタックスハイライト
 `.vb` は同梱の `syntax/vb.vim` で filetype `vb` として色が付くが、これは VB6 世代で
