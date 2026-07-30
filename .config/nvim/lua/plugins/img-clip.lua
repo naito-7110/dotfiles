@@ -10,6 +10,14 @@ return {
 			relative_to_current_file = true,
 			prompt_for_file_name = true,
 		},
+		-- 7110.dev のスライドはビルドが slides/img/ しか dist にコピーしないため img/ に保存する
+		dirs = {
+			["works/7110.dev"] = {
+				default = {
+					dir_path = "img",
+				},
+			},
+		},
 	},
 	keys = {
 		{ "<leader>mi", "<cmd>PasteImage<cr>", desc = "Paste image from clipboard" },
