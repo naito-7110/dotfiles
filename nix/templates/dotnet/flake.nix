@@ -84,7 +84,10 @@
 
               # 参照 DLL をソースに戻して読むため。
               pkgs.ilspycmd
-            ];
+            ]
+            # DAP デバッガ。macOS arm64 では署名・entitlement の制約で
+            # nvim-dap から動かせないため Linux のみ (macOS は VSCode で代用)。
+            ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.netcoredbg ];
           };
         }
       );
