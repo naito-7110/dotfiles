@@ -48,6 +48,34 @@ return {
 					args = {},
 				},
 			}
+
+			-- .NET (netcoredbg from the dotnet devShell; Linux only — see docs/neovim.md)
+			dap.adapters.coreclr = {
+				type = "executable",
+				command = "netcoredbg",
+				args = { "--interpreter=vscode" },
+			}
+
+			dap.configurations.cs = {
+				{
+					name = "Launch DLL",
+					type = "coreclr",
+					request = "launch",
+					program = function()
+						return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/bin/Debug/", "file")
+					end,
+					cwd = "${workspaceFolder}",
+				},
+				{
+					name = "Attach",
+					type = "coreclr",
+					request = "attach",
+					processId = function()
+						return require("dap.utils").pick_process()
+					end,
+				},
+			}
+			dap.configurations.vb = dap.configurations.cs
 		end,
 	},
 }

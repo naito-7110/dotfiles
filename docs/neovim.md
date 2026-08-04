@@ -106,18 +106,22 @@ LSP とは別に、コンパイラを直接叩く経路も用意してある。*
 - macOS: 画像ペーストに `pngpaste` 推奨 (未導入の場合 `osascript` フォールバック)
 
 ## DAP (Debugger)
-Rust 用デバッガが devShell に同梱されている。C# (netcoredbg) は macOS arm64
-で署名・entitlement の制約により nvim-dap から動作させるのが困難なため
-非対応 (LSP のみ)。ブレークポイントが要る場合は VSCode を使う。
+各言語のデバッガは devShell に同梱されている。C#/VB.NET (netcoredbg) は
+Linux のみ — macOS arm64 では署名・entitlement の制約で nvim-dap から
+動かせないため、macOS でブレークポイントが要る場合は VSCode を使う。
 
-| Lang | Adapter | nixpkgs |
-|------|---------|---------|
-| Rust | lldb-dap | `lldb` |
+| Lang | Adapter | nixpkgs | 備考 |
+|------|---------|---------|------|
+| Rust | lldb-dap | `lldb` | |
+| C# / VB.NET | netcoredbg | `netcoredbg` | Linux のみ |
 
 ### 使い方
 1. 該当言語の devShell で `direnv allow` または `nix develop`
 2. Neovim 起動 → lazy.nvim が `nvim-dap` / `dap-ui` / `dap-virtual-text` を自動インストール
-3. `cargo build` 後、`<leader>dc` で起動。実行ファイルパス (`target/debug/<bin>`) を聞かれる
+3. Rust: `cargo build` 後、`<leader>dc` で起動。実行ファイルパス (`target/debug/<bin>`) を聞かれる
+4. .NET: `dotnet build` (Debug 構成) 後、`<leader>dc` → `Launch DLL` を選び
+   `bin/Debug/net10.0/<App>.dll` を指定。実行中プロセスには `Attach` を選んでアタッチ。
+   Release ビルドや publish 済みバイナリにはブレークポイントが刺さらない
 
 ### Keymaps
 | Key | Action |
@@ -127,6 +131,7 @@ Rust 用デバッガが devShell に同梱されている。C# (netcoredbg) は 
 | `<leader>db` | breakpoint toggle |
 | `<leader>do` / `di` / `dO` | step over / into / out |
 | `<leader>dr` | REPL toggle |
+| `<leader>dq` | terminate |
 
 ### トラブルシュート
 - アダプタが見つからない → `which lldb-dap` で PATH 確認、devShell に入り直す
