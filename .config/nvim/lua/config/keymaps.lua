@@ -14,6 +14,10 @@ vim.keymap.set("n", "<SPACE>k", "ddkkp")
 vim.keymap.set("n", "<SPACE>j", "ddp")
 vim.keymap.set({ "i", "v" }, "<C-e>", "<ESC>") -- 'Ctr'と'e'でnormal modeにする
 
+-- 矩形ビジュアル（マルチカーソル）の代替キー。
+-- WSL では wezterm が Ctrl+V をクリップボード画像の取り込みに使っており nvim まで届かないため。
+vim.keymap.set({ "n", "v" }, "<leader>v", "<C-v>", { desc = "Visual block mode" })
+
 -- プラグイン関係のkeymap
 vim.keymap.set({ "n", "v" }, "<SPACE>f", ":Telescope find_files<CR>") -- ファイルファインダー
 vim.keymap.set({ "n", "v" }, "<SPACE>g", ":Telescope live_grep<CR>") -- グレップファインド
