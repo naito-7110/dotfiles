@@ -35,4 +35,8 @@
     path = ./bun;
     description = "Bun";
   };
+  python = {
+    path = ./python;
+    description = "Python (uv + basedpyright + ruff)";
+  };
 }

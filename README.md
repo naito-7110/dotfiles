@@ -20,6 +20,10 @@ sudo darwin-rebuild switch --flake .#7110
 ```sh
 nix flake init -t github:naito-7110/dotfiles#node
 ```
+- python (uv + basedpyright + ruff)
+```sh
+nix flake init -t github:naito-7110/dotfiles#python
+```
 
 ## Docs
 - [WSL 事前環境登録](./docs/wsl-setup.md)
