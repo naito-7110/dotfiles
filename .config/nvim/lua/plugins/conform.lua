@@ -28,6 +28,8 @@ return {
 			rust = { "rustfmt" },
 			nix = { "nixfmt" },
 			typst = { "typstyle" },
+			-- ruff は devShell 供給。organize imports → format の順で走らせる
+			python = { "ruff_organize_imports", "ruff_format" },
 		},
 		format_on_save = {
 			timeout_ms = 1000,

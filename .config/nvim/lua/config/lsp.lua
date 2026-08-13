@@ -258,3 +258,53 @@ vim.lsp.config("jsonls", {
 })
 
 vim.lsp.enable("jsonls")
+
+-- Python
+-- basedpyright (型・補完・ジャンプ) と ruff (lint・format) の 2 枚構成。
+-- どちらも python テンプレートの devShell から供給する（プロジェクトの
+-- インタプリタ世代に合わせたいのでグローバルの lsp.nix には置かない）。
+--
+-- 最重要: pythonPath に uv の .venv を渡すこと。渡さないと basedpyright は
+-- 素の python を見に行き、サードパーティの import が全部
+-- "could not be resolved" になる（自前のコードだけ補完が効くので気付きにくい）。
+vim.lsp.config("basedpyright", {
+	cmd = { "basedpyright-langserver", "--stdio" },
+	filetypes = { "python" },
+	root_markers = { "pyproject.toml", "uv.lock", "setup.py", "setup.cfg", "requirements.txt", ".venv", ".git" },
+	settings = {
+		basedpyright = {
+			-- import 整理は ruff の担当。両方有効だと code action が二重に出る。
+			disableOrganizeImports = true,
+			analysis = {
+				-- 既定の "recommended" は型注釈の無い既存コードに対して
+				-- 診断が壊滅的に出るので一段落とす。
+				typeCheckingMode = "standard",
+				diagnosticMode = "openFilesOnly",
+				autoSearchPaths = true,
+				useLibraryCodeForTypes = true,
+				autoImportCompletions = true,
+			},
+		},
+	},
+	on_init = function(client)
+		local settings = client.config.settings
+		settings.python = vim.tbl_deep_extend("force", settings.python or {}, {
+			pythonPath = require("config.python").venv_python(client.config.root_dir),
+		})
+		client:notify("workspace/didChangeConfiguration", { settings = settings })
+	end,
+})
+
+vim.lsp.enable("basedpyright")
+
+vim.lsp.config("ruff", {
+	cmd = { "ruff", "server" },
+	filetypes = { "python" },
+	root_markers = { "pyproject.toml", "ruff.toml", ".ruff.toml", ".git" },
+	on_attach = function(client)
+		-- ホバーは basedpyright の担当。両方出すと型情報が lint 文言に負ける。
+		client.server_capabilities.hoverProvider = false
+	end,
+})
+
+vim.lsp.enable("ruff")

@@ -17,6 +17,8 @@ return {
 				"markdown_inline",
 				"json",
 				"typst",
+				"python",
+				"toml",
 			},
 			highlight = { enable = true },
 			indent = { enable = true },
