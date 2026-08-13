@@ -12,6 +12,7 @@
 | VB.NET | vb-ls | dotnet devShell (nixpkgs 未収録のため[自前パッケージング](#vbnet-の-lsp-vb_ls)) |
 | Rust | rust-analyzer | rust devShell |
 | TypeScript / Vue | ts_ls, vue_ls | node devShell |
+| Python | basedpyright, ruff | python devShell |
 | Lua | lua_ls | root devShell |
 | Nix | nil | root devShell |
 | Markdown | marksman | root devShell |
@@ -83,6 +84,54 @@ LSP とは別に、コンパイラを直接叩く経路も用意してある。*
 `after/syntax/vb.vim` で VB.NET のキーワードを補っている
 (treesitter に VB グラマーは無い)。
 
+## Python (uv)
+
+`nix flake init -t github:naito-7110/dotfiles#python` の devShell 前提。
+uv がプロジェクト直下に `.venv` を作り、LSP も DAP も**その中の python** を使う。
+
+```sh
+direnv allow
+uv init && uv sync
+uv add --dev debugpy   # デバッグする場合
+```
+
+### インタプリタ解決
+`lua/config/python.lua` に一本化してある（LSP と DAP で同じものを使う必要があるため）。
+`$VIRTUAL_ENV` → バッファから上方向に探した `.venv/bin/python` → PATH の `python3` の順。
+
+**これを basedpyright に渡さないと補完が半分死ぬ**: 素の python を見に行くので
+サードパーティの import が全部 `could not be resolved` になる一方、
+自前モジュールの補完は効いてしまうので原因に気付きにくい。
+
+### LSP 2 枚の役割分担
+| Server | 担当 |
+|--------|------|
+| basedpyright | 型チェック・補完・定義ジャンプ・ホバー |
+| ruff | lint 診断・フォーマット (conform が保存時に呼ぶ) |
+
+- ruff の `hoverProvider` は切ってある（basedpyright の型情報が lint 文言に負けるため）
+- basedpyright の `disableOrganizeImports` も切ってある（import 整理は ruff 側）
+- `typeCheckingMode` は既定の `recommended` から `standard` に落としてある。
+  `recommended` は型注釈の無い既存コードに対して診断が壊滅的に出る
+
+### デバッグ
+debugpy は **nix ではなく venv に入れる** (`uv add --dev debugpy`)。
+デバッグ対象と同じインタプリタで adapter を起動しないとブレークポイントが刺さらない。
+
+| Config | 用途 |
+|--------|------|
+| Launch file | 現在のバッファを実行 |
+| Launch module | `python -m <name>` 相当 |
+| Attach | `python -m debugpy --listen 5678 --wait-for-client ...` で起動済みのプロセスに接続 (uvicorn / pytest 経由はこちら) |
+
+### uv と nix のハマりどころ
+- **uv に Python を落とさせない。** 既定では python-build-standalone のビルド済み
+  バイナリを取ってくるが NixOS ではリンカが合わず動かない。テンプレートの devShell が
+  `UV_PYTHON` を nixpkgs のインタプリタに固定し `UV_PYTHON_DOWNLOADS=never` にしている
+- **manylinux wheel** (numpy 等) は nix の外の `libstdc++.so.6` を要求する。
+  devShell の shellHook で `LD_LIBRARY_PATH` を通してある (Linux のみ)
+- `pip install` ではなく `uv add` を使う。pyproject.toml と `uv.lock` に載らない
+
 ## Markdown
 | Plugin | 役割 |
 |--------|------|
@@ -114,6 +163,7 @@ Linux のみ — macOS arm64 では署名・entitlement の制約で nvim-dap �
 |------|---------|---------|------|
 | Rust | lldb-dap | `lldb` | |
 | C# / VB.NET | netcoredbg | `netcoredbg` | Linux のみ |
+| Python | debugpy | (nix ではなく venv) | `uv add --dev debugpy` |
 
 ### 使い方
 1. 該当言語の devShell で `direnv allow` または `nix develop`
