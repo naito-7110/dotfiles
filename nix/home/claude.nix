@@ -47,8 +47,9 @@ let
       transcript="$2"
 
       # 直近の会話テキスト。ツール結果 / thinking / system-reminder は除外し、
-      # 1 メッセージ 400 バイトに切り詰める (multibyte の欠けは iconv -c で除去)
-      recent=$(tail -n 80 "$transcript" | ${pkgs.jq}/bin/jq -r '
+      # 1 メッセージ 400 バイトに切り詰める (multibyte の欠けは iconv -c で除去)。
+      # ツール出力の巨大な行がほとんどを占めるので、行数は多めに取る
+      recent=$(tail -n 300 "$transcript" | ${pkgs.jq}/bin/jq -r '
           select(.type == "user" or .type == "assistant")
           | select(.isMeta != true)
           | .message.content
@@ -56,20 +57,27 @@ let
             elif type == "array" then ([ .[] | select(.type == "text") | .text ] | join(" "))
             else empty end' 2>/dev/null \
         | grep -v -e '^[[:space:]]*$' -e '^<' \
-        | tail -n 12 | cut -c 1-400 | iconv -f UTF-8 -t UTF-8 -c)
+        | tail -n 16 | cut -c 1-400 | iconv -f UTF-8 -t UTF-8 -c)
       [ -n "$recent" ] || exit 0
 
       prev=$(tmux show-options -pqv -t "$TMUX_PANE" @claude_topic)
-      inst="以下は開発セッションの直近の会話ログ。今の話題を表す短い日本語ラベル(15文字以内)だけを1行で出力して。"
+      inst="以下は開発セッションの直近の会話ログ。今の話題を表す短い日本語ラベル(15文字以内)だけを1行で出力して。説明文・謝罪・エラー報告は出力しない。"
       if [ -n "$prev" ]; then
         inst="$inst 現在のラベルは「$prev」。話題が実質変わっていなければ現在のラベルをそのまま出力して。"
       fi
 
       title=$(printf '%s\n' "$recent" \
         | CLAUDE_TMUX_TOPIC_INNER=1 timeout 60 claude -p --model haiku "$inst" \
-        | tr -d '\n"`' | head -c 60 | iconv -f UTF-8 -t UTF-8 -c)
+        | tr -d '\n"`' | head -c 72 | iconv -f UTF-8 -t UTF-8 -c)
 
-      [ -n "$title" ] && [ "$title" != "$prev" ] || exit 0
+      # ラベルとして異常な出力は捨てて据え置く (次の周期で自己回復する):
+      # claude -p のエラー文 / 句点入りの説明文 / 長すぎる出力 (>60 バイト ≈ 20 文字)
+      case "$title" in
+        *"Execution error"* | *"API Error"* | *。*) exit 0 ;;
+      esac
+      [ -n "$title" ] && [ "''${#title}" -le 60 ] || exit 0
+
+      [ "$title" != "$prev" ] || exit 0
       tmux set-option -p -t "$TMUX_PANE" @claude_topic "$title"
       exit 0
     fi
