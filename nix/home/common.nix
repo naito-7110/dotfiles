@@ -1,6 +1,5 @@
 {
   pkgs,
-  pkgs-master,
   username,
   homeDirectory,
   ...
@@ -30,6 +29,7 @@ in
     ./lazygit.nix
     ./tmux.nix
     ./lsp.nix
+    ./claude.nix
   ];
 
   programs = {
@@ -81,8 +81,6 @@ in
       btop # top: 対話モニタ
       sd # sed: 置換特化のモダン文法（`sd 'foo' 'bar'`）
       tealdeer # tldr: コマンド使用例（`tldr tar`）
-
-      pkgs-master.claude-code
 
       preview
 
