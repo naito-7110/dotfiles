@@ -67,8 +67,12 @@ local function smart_paste(window, pane)
 	})
 	local path = (ok and stdout or ""):gsub("%s+$", "")
 	if #path > 0 then
-		-- ブラケットペースト（@補完メニューを出さずリテラル挿入する）
-		pane:send_text("\x1b[200~" .. path .. "\x1b[201~")
+		-- ブラケットペースト（@補完メニューを出さずリテラル挿入する）。
+		-- 末尾スペースで @トークンを確定させる。これが無いと続けて打った文字が
+		-- パスに連結されてファイル参照が壊れる上、カーソル下の @トークンに
+		-- ファイル補完が反応し、IME 変換確定の Enter が補完確定に化けて
+		-- パスが二重挿入される。
+		pane:send_text("\x1b[200~" .. path .. " \x1b[201~")
 	else
 		window:perform_action(wezterm.action.PasteFrom("Clipboard"), pane)
 	end

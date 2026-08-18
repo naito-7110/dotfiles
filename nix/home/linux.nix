@@ -49,10 +49,12 @@ let
 
     # --stdout: @パスを stdout に出すだけ（WezTerm がこれを受け取りブラケットペーストする）。
     # 既定: @パスをクリップボードにも入れる（!clipimg を手動実行して Ctrl+V する用途）。
+    # 手動経路は末尾スペース付きで入れる（@トークンを確定させ、後続入力の連結と
+    # ファイル補完の暴発を防ぐ。WezTerm 経路は windows.lua 側でスペースを付ける）。
     if [ "''${1:-}" = "--stdout" ]; then
       printf '@%s' "$out"
     else
-      printf '@%s' "$out" | "$wl_copy"
+      printf '@%s ' "$out" | "$wl_copy"
       echo "clipimg: $out を保存し、@パスをクリップボードに入れました。Ctrl+V で貼り付けてください。" >&2
     fi
   '';
