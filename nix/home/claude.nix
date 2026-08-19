@@ -35,10 +35,26 @@ let
     stamp="$cache/$(printf '%s' "$TMUX_PANE" | tr -c 'A-Za-z0-9' _).stamp"
 
     # SessionStart から「reset」で呼ばれたら前セッションの話題とスタンプを消す
-    # (次の Stop でスロットリングを待たずに新しい話題が付く)
+    # (次の Stop でスロットリングを待たずに新しい話題が付く)。
+    # 起動直後は入力待ちなので状態は idle にしておく
     if [ "''${1:-}" = "reset" ]; then
       tmux set-option -pu -t "$TMUX_PANE" @claude_topic 2>/dev/null
+      tmux set-option -p -t "$TMUX_PANE" @claude_state idle 2>/dev/null
       rm -f "$stamp"
+      exit 0
+    fi
+
+    # 「state busy|attention」: 各フックから呼ばれ、境界線の色分け用の状態を
+    # @claude_state に書く。attention は permission 待ちが対象。ただの入力待ち
+    # 通知は無視する (Stop の idle で既に赤になっており、上書きすると紛らわしい)
+    if [ "''${1:-}" = "state" ]; then
+      if [ "''${2:-}" = "attention" ]; then
+        msg=$(${pkgs.jq}/bin/jq -r '.message // empty' 2>/dev/null)
+        case "$msg" in
+          *"waiting for your input"*) exit 0 ;;
+        esac
+      fi
+      tmux set-option -p -t "$TMUX_PANE" @claude_state "''${2:-}" 2>/dev/null
       exit 0
     fi
 
@@ -82,7 +98,10 @@ let
       exit 0
     fi
 
-    # ここから Stop フック本体。stdin にフックの JSON が来る
+    # ここから Stop フック本体。応答が終わった = 入力待ちなので idle にする
+    tmux set-option -p -t "$TMUX_PANE" @claude_state idle 2>/dev/null
+
+    # stdin にフックの JSON が来る
     transcript=$(${pkgs.jq}/bin/jq -r '.transcript_path // empty')
     [ -n "$transcript" ] && [ -f "$transcript" ] || exit 0
 
@@ -116,12 +135,47 @@ let
             ];
           }
         ];
+        # compact を含めないのは、ターン途中の自動 compact で話題や状態を
+        # リセットしてしまわないため
         SessionStart = [
           {
+            matcher = "startup|resume|clear";
             hooks = [
               {
                 type = "command";
                 command = "claude-tmux-topic reset";
+              }
+            ];
+          }
+        ];
+        # 境界線の色分け用の状態遷移。PostToolUse も busy にするのは、
+        # permission 承認後に attention から復帰させるため
+        UserPromptSubmit = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = "claude-tmux-topic state busy";
+              }
+            ];
+          }
+        ];
+        PostToolUse = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = "claude-tmux-topic state busy";
+              }
+            ];
+          }
+        ];
+        Notification = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = "claude-tmux-topic state attention";
               }
             ];
           }

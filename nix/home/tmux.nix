@@ -31,9 +31,11 @@
       # claude が動いているペインは「今の話題」を末尾に付けて識別しやすくする。
       # 話題は claude.nix の Stop フックが @claude_topic (ペイン local ユーザー
       # オプション) に 5 分ごとに書く。まだ無ければ Claude Code が起動時に付ける
-      # 端末タイトル (=初期要約) にフォールバック
+      # 端末タイトル (=初期要約) にフォールバック。
+      # 色は @claude_state (同フック群が更新) で切り替える:
+      #   稼働中 busy=シアン / 停止中 (入力待ち) idle=赤 / permission 待ち attention=オレンジ
       set-option -g pane-border-status top
-      set-option -g pane-border-format " #[bold]#{pane_index}#[nobold] #{s,^/(home|Users)/[^/]+,~,:pane_current_path}#{?#{==:#{pane_current_command},claude},  #[fg=colour51]#{?@claude_topic,#{@claude_topic},#{pane_title}}#[default],} "
+      set-option -g pane-border-format " #[bold]#{pane_index}#[nobold] #{s,^/(home|Users)/[^/]+,~,:pane_current_path}#{?#{==:#{pane_current_command},claude},  #[fg=#{?#{==:#{@claude_state},idle},colour196,#{?#{==:#{@claude_state},attention},colour214,colour51}}]#{?@claude_topic,#{@claude_topic},#{pane_title}}#[default],} "
 
       # ウィンドウ名: claude のときは今の話題 (同上のフォールバック付き) を使う
       # → 複数の claude を開いてもステータスバーの一覧で区別できる (既定は pane_current_command で全部 "claude" になる)
