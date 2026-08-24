@@ -1,9 +1,9 @@
 { pkgs, ... }:
 {
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  # Nix 本体 (デーモン / nix.conf) は Determinate Nix が管理するため、
+  # nix-darwin 側の Nix 管理は無効化する（両 Mac とも Determinate インストーラ）。
+  # flakes 等の experimental-features も Determinate 側の nix.conf が有効化済み。
+  nix.enable = false;
 
   environment.systemPackages = with pkgs; [
     wezterm
