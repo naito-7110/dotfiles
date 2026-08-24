@@ -54,6 +54,14 @@
       bind k select-pane -U
       bind l select-pane -R
 
+      # ペインをウィンドウ間で移動する
+      # 誤って別ウィンドウに開いてしまったペインを集約し直す用。
+      # J: ウィンドウ 1 へ即移動（一番よくやる操作なのでキー一発）
+      # M-j: 移動先を聞く（例: 3 と入力 → ウィンドウ 3 へ）
+      # 逆向き（ペインを別ウィンドウへ切り出す）は既定の prefix + ! (break-pane)。
+      bind J join-pane -h -t :1
+      bind M-j command-prompt -p "join pane to window:" "join-pane -h -t ':%%'"
+
       # prefix + Space (next-layout) を無効化
       # → 誤爆でペイン配置が勝手に変わるのを防ぐ
       unbind Space
