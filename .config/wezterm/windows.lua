@@ -1,12 +1,16 @@
 -- Windows(ホスト)側 WezTerm 設定の正本。
 -- WSL の home-manager は $HOME 配下しか宣言的に管理できず、Windows の実ファイルは
--- 管理領域の外。そのため本ファイルを git 管理の正本とし、Windows へは手動でコピーする
--- （自動同期も実行時の host→WSL 参照もしない）。反映手順は README を参照。
+-- 管理領域の外。Windows の User 環境変数 WEZTERM_CONFIG_FILE が本ファイルを
+--   \\wsl.localhost\ubuntu-nix\home\naito-7110\works\dotfiles\.config\wezterm\windows.lua
+-- として直接指しており、編集はそのままホストに反映される（\\wsl.localhost 越しは
+-- 自動リロードが効かないことがあるので、反映されない時は Ctrl+Shift+R で再読込）。
 --
--- 反映先: C:\Users\rsima\.config\wezterm\wezterm.lua
---   （WEZTERM_CONFIG_FILE がこのパスを指している）
--- コピー: cp ~/works/dotfiles/.config/wezterm/windows.lua \
---           /mnt/c/Users/rsima/.config/wezterm/wezterm.lua
+-- 環境変数が無い起動経路では既定の探索先が読まれるため、フォールバックとして
+-- 同内容のコピーを C:\Users\rsima\.config\wezterm\wezterm.lua にも置く。更新:
+--   cp ~/works/dotfiles/.config/wezterm/windows.lua \
+--      /mnt/c/Users/rsima/.config/wezterm/wezterm.lua
+-- ※過去に手動コピー運用のみだった頃、コピー忘れでキーバインド欠落が再発したため
+--   環境変数での直接参照に移行した(2026-09-03)。
 
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
