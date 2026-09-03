@@ -79,6 +79,9 @@ local function smart_paste(window, pane)
 end
 
 config.keys = {
+	-- Ctrl+Enter はデフォルトで CR (Enter と同じ) になるため、
+	-- LF (= Ctrl+J) を送って Claude Code などで改行として扱えるようにする
+	{ key = "Enter", mods = "CTRL", action = wezterm.action.SendString("\n") },
 	{
 		key = "v",
 		mods = "CTRL",
