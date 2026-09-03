@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 let
   # wslu は上流がアーカイブされ nixpkgs から削除されたため、wslview だけを自前で再現する。
   # gh / octo などの browser opener は wslview（無ければ xdg-open）を探すので、同名で提供すれば
@@ -70,6 +70,45 @@ let
     exec /mnt/c/Windows/System32/cmd.exe /c start "" chrome \
       --disable-features=CalculateNativeWinOcclusion "$@"
   '';
+
+  # Windows ホストの WezTerm 設定読み込み（詳細は .config/wezterm/windows.lua 冒頭）:
+  #   1. User 環境変数 WEZTERM_CONFIG_FILE がリポジトリの windows.lua を \\wsl.localhost
+  #      経由で直接指す（正）
+  #   2. 環境変数が無い起動経路向けに %USERPROFILE%\.config\wezterm\wezterm.lua へ
+  #      同内容のコピーを置く（フォールバック）
+  # どちらも HKCU / Windows FS 上にあり home-manager の管理外なので、switch のたびに
+  # PowerShell で冪等に突き合わせる。環境変数の書き込みは WM_SETTINGCHANGE を
+  # broadcast するため、値が違うときだけ行う。
+  weztermHostPs1 = pkgs.writeText "wezterm-host-config.ps1" ''
+    param([string]$ConfigPath)
+    $ErrorActionPreference = 'Stop'
+    if ([Environment]::GetEnvironmentVariable('WEZTERM_CONFIG_FILE', 'User') -ne $ConfigPath) {
+      [Environment]::SetEnvironmentVariable('WEZTERM_CONFIG_FILE', $ConfigPath, 'User')
+      Write-Host "wezterm: WEZTERM_CONFIG_FILE (User) -> $ConfigPath"
+    }
+    $dst = Join-Path $env:USERPROFILE '.config\wezterm\wezterm.lua'
+    if (!(Test-Path $dst) -or (Get-FileHash $ConfigPath).Hash -ne (Get-FileHash $dst).Hash) {
+      New-Item -ItemType Directory -Force (Split-Path $dst) | Out-Null
+      Copy-Item $ConfigPath $dst -Force
+      Write-Host "wezterm: フォールバックコピーを更新 -> $dst"
+    }
+  '';
+
+  weztermHostConfig = pkgs.writeShellScript "wezterm-host-config" ''
+    set -eu
+    ps=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
+    cfg="$HOME/works/dotfiles/.config/wezterm/windows.lua"
+    # interop 無効環境やリポジトリ未 clone 時は黙ってスキップ
+    if [ ! -x "$ps" ] || [ ! -f "$cfg" ]; then
+      exit 0
+    fi
+    # Windows 側の一時的な不調で switch 全体を落とさない
+    if ! "$ps" -NoProfile -ExecutionPolicy Bypass \
+        -File "$(/usr/bin/wslpath -w ${weztermHostPs1})" \
+        "$(/usr/bin/wslpath -w "$cfg")"; then
+      echo "wezterm-host-config: Windows 側の反映に失敗しました（無視して続行）" >&2
+    fi
+  '';
 in
 {
   # WSL (Ubuntu) 上の standalone home-manager 用のホーム設定。
@@ -96,4 +135,8 @@ in
     clipimg
     chrome
   ];
+
+  home.activation.weztermHostConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${weztermHostConfig}
+  '';
 }
