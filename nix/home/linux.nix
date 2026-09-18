@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   # wslu は上流がアーカイブされ nixpkgs から削除されたため、wslview だけを自前で再現する。
   # gh / octo などの browser opener は wslview（無ければ xdg-open）を探すので、同名で提供すれば
@@ -121,6 +126,25 @@ in
 
   # gh / xdg-open / octo の <leader>ob などから Windows 既定ブラウザを開くため。
   home.sessionVariables.BROWSER = "wslview";
+
+  # 一時ディレクトリを tmpfs (/tmp) から実ディスクへ逃がす。
+  # nix develop / nix-shell は起動時の TMPDIR を基点に nix-shell.XXXX を作るが、
+  # これを終了時に消さない（異常終了時だけでなく正常終了でも残る。クリーンな
+  # `nix develop --command true` を 3 回実行して 3 個とも残ることを実測で確認）。
+  # WSL の /tmp は tmpfs すなわち実メモリなので、direnv が cd のたびに devShell へ
+  # 入り直す運用では約 250 個/日のペースでメモリを食い潰す。実際 10 日で 1509 個・
+  # 3.5GB まで育ち、swap を満杯にして 2026-09-09 に OOM で tmux ペインが落ちた。
+  # TMPDIR をディスク上に向けると、同じ量が漏れてもメモリは 1 バイトも減らない。
+  # 実測では tmpfs との速度差は逐次書き込みで 1.23 倍・小ファイル 3000 個で 1.15 倍と
+  # 小さく（WSL2 の rootfs が NVMe 上の ext4 のため）、page cache に載るぶん
+  # メモリ逼迫時はむしろ有利。
+  # 注意: /tmp を離れるので systemd-tmpfiles の 10d 掃除が効かない。溜まり続けるため
+  # 別途この配下の定期削除が要る（ディスクなので緊急性は低い）。
+  home.sessionVariables.TMPDIR = "${config.home.homeDirectory}/.cache/nix-tmp";
+
+  home.activation.ensureNixTmpDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run mkdir -p ${config.home.homeDirectory}/.cache/nix-tmp
+  '';
 
   # WSL 固有の追加パッケージ。
   # （wezterm / vscode / docker は Windows 側で扱うため除外）
