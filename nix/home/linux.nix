@@ -75,6 +75,22 @@ let
     exec /mnt/c/Windows/System32/cmd.exe /c start "" chrome \
       --disable-features=CalculateNativeWinOcclusion "$@"
   '';
+  # Windows のスクショ (Win+Shift+S) が「砂時計は出るが画面が暗くならない」状態で
+  # 固まったときの復旧用。前回起動した Snipping Tool / ScreenClippingHost が
+  # ハングして残り、新しいオーバーレイを開けなくなっているので強制終了する。
+  # 次の Win+Shift+S で自動的に起動し直される。
+  fixsnip = pkgs.writeShellScriptBin "fixsnip" ''
+    cd /mnt/c
+    exec /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command '
+      $p = Get-Process SnippingTool, ScreenClippingHost -ErrorAction SilentlyContinue
+      if ($p) {
+        $p | ForEach-Object { Write-Host ("fixsnip: kill " + $_.ProcessName + " (" + $_.Id + ")") }
+        $p | Stop-Process -Force
+      } else {
+        # powershell.exe 5.1 の出力は日本語が化けるので ASCII で出す
+        Write-Host "fixsnip: no stuck process (try Settings > Apps > Snipping Tool > Repair/Reset)"
+      }'
+  '';
 
   # Windows ホストの WezTerm 設定読み込み（詳細は .config/wezterm/windows.lua 冒頭）:
   #   1. User 環境変数 WEZTERM_CONFIG_FILE がリポジトリの windows.lua を \\wsl.localhost
@@ -158,6 +174,7 @@ in
     wslview
     clipimg
     chrome
+    fixsnip
   ];
 
   home.activation.weztermHostConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
