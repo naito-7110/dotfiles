@@ -39,4 +39,8 @@
     path = ./python;
     description = "Python (uv + basedpyright + ruff)";
   };
+  security = {
+    path = ./security;
+    description = "Security scan (nmap + nuclei + testssl + zap)";
+  };
 }

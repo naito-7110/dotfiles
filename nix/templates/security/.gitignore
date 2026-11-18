@@ -1,0 +1,9 @@
+.direnv
+# 対象情報・スキャン結果はコミットしない (projects/ 配下に対象ごとに置く)
+projects/
+.envrc.local
+.zap-home/
+.nuclei-templates/
+__pycache__/
+*.pyc
+*:Zone.Identifier
