@@ -5,6 +5,34 @@
   zenoSrc,
   ...
 }:
+let
+  # zeno のサーバー後始末は zshexit フック頼みで、tmux ペイン強制終了や WSL 停止では走らず
+  # deno が PPID=1 の孤児として残り続ける。ソケット名 (zeno-<シェルPID>.sock) から親シェルの
+  # PID を取り、そのシェルが消えたらサーバーも道連れにするラッパーを ZENO_SERVER_BIN に差す。
+  zenoServerGuarded = pkgs.writeShellScriptBin "zeno-server-guarded" ''
+    sock_name="''${ZENO_SOCK##*/}"
+    owner="''${sock_name#zeno-}"
+    owner="''${owner%.sock}"
+
+    ${pkgs.deno}/bin/deno run --node-modules-dir=auto --no-check \
+      --allow-env --allow-read --allow-run --allow-write --allow-ffi --allow-net \
+      -- "$ZENO_ROOT/src/server.ts" "$@" &
+    server=$!
+    trap 'kill "$server" 2>/dev/null' TERM INT HUP
+
+    # 数値でなければ監視せず server の終了だけ待つ
+    if [[ "$owner" =~ ^[0-9]+$ ]]; then
+      while kill -0 "$server" 2>/dev/null; do
+        if ! kill -0 "$owner" 2>/dev/null; then
+          kill "$server" 2>/dev/null
+          break
+        fi
+        sleep 5
+      done
+    fi
+    wait "$server"
+  '';
+in
 {
   # zeno.zsh: Deno 製の zsh 統合プラグイン。フル機能はスペース(auto-snippet)/Tab(completion)/
   # Ctrl-R(history) を奪うが、ここは既存の zsh-abbr / fzf-tab / atuin を尊重して「共存」させる。
@@ -32,6 +60,7 @@
   # 未設定のまま store 直参照に戻ってしまう。ガードの外 (.zshenv) で毎回 export する。
   programs.zsh.envExtra = ''
     export ZENO_ROOT="${config.home.homeDirectory}/.local/share/zeno"
+    export ZENO_SERVER_BIN="${zenoServerGuarded}/bin/zeno-server-guarded"
   '';
 
   programs.zsh.plugins = [
